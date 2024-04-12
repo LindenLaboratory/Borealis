@@ -8,28 +8,14 @@ Borealis is a network designed to automate parallel processing and multi-compute
 - The _Conductor_ encrypts instructions and distributes them out to the _Associate[s]_ via web server on a privately hosted WiFi network
 - Instruction encryption & formatting is done with the **Eos*** Protocol
 
-### Associate[s]
-- The _Associate_ is the second device that makes up the network
-- There will usually be more than one _Associate_ on the network
-- _Associates_ connect to the _Conductor_ and receive instructions
-- They then transmit these instructions over a small range using BLE** and the instructions are received by the _Choir_/Computers
-- With several _Associates_ the range from the group covers a large area
-
 ### Choir
 - The _Choir_ is the final type of device making up the network
 - There will usually be more than one _Choir_ device on the network
-- The _Choir_ devices have two modes:
-#### HID Mode
-1. HID*** Mode requires the Choir device to be actively connected to the Computer
-2. It works with any computer, from Macbook to PC to Chromebook
-3. It receives instructions directly from the _Conductor_, processes them to discard any commands that do not involve keyboard or mouse and then executes them accordingly on the computer
-4. It does not utilise the _Associate[s]_, skipping it entirely
-#### Software Mode
-1. Software Mode does not receive or process any commands
-2. It only works on computers that use the Windows OS
-3. When plugged into a computer it uses HID to download the Borealis exe from this repo and running it, receiving commands from the _Choir_ BLE** and running them
+- The _Choir_ do not receive or process any commands
+- They only works on computers that use the Windows OS
+- When plugged into a computer it uses HID to download the **borealis.exe** & **-.xml** files from this repo and runs the exe, which uses the xml file to connect to the _Conductor_ every 30s, executes the commands & stores the results
 4. Once it is done (5-10s) the device can be disconnected
-5. This allows Software Mode to run on the computer with no external devices connected and execute all non-keyboard/mouse commands
+5. This allows the _Choir_ to run on the computer with no external devices connected
 
 ## Eos* Protocol
 
