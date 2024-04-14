@@ -1,4 +1,4 @@
-# Borealis
+  # Borealis
 Borealis is a network designed to automate parallel processing and multi-computer control without needing a wifi network. The Borealis network contains 3 types of devices. See the descriptions of these below.
 
 ## Borealis Devices
@@ -12,10 +12,10 @@ Borealis is a network designed to automate parallel processing and multi-compute
 - The _Choir_ is the final type of device making up the network
 - There will usually be more than one _Choir_ device on the network
 - The _Choir_ do not receive or process any commands
-- They only works on computers that use the Windows OS
-- When plugged into a computer it uses HID to download the **borealis.exe** & **-.xml** files from this repo and runs the exe, which uses the xml file to connect to the _Conductor_ every 30s, executes the commands & stores the results
-4. Once it is done (5-10s) the device can be disconnected
-5. This allows the _Choir_ to run on the computer with no external devices connected
+- They only work on computers that use the Windows OS
+- When plugged into a computer it uses HID copy over the **Borealis** folder to the target computer and execute the program
+- Once it is done (5-10s) the device can be disconnected
+- This allows the _Choir_ to run on the computer with no external devices connected
 
 ## Eos* Protocol
 
