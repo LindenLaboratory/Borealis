@@ -14,7 +14,7 @@ Borealis is a network designed to automate parallel processing and multi-compute
 - The _Choir_ do not receive or process any commands
 - They only work on computers that use the Windows OS
 - When plugged into a computer it uses HID copy over the **Borealis** folder to the target computer and execute the program
-- Once it is done (5-10s) the device can be disconnected
+- Once it is done (3-10s) the device can be disconnected
 - This allows the _Choir_ to run on the computer with no external devices connected
 
 ## Eos* Protocol
