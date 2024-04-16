@@ -1,2 +1,0 @@
-oscmd:.shutdown /p
-mouseclick:.1
