@@ -1,2 +1,2 @@
 def oscmd(cmd):
-	subprocess.call(cmd)
+	os.system(cmd)
