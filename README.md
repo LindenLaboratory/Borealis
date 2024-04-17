@@ -38,7 +38,8 @@ Borealis is a network designed to automate parallel processing and multi-compute
 - The _Choir_ devices run on Raspberry Pi Pico Ws
 - They connect to computers via usb-to-microusb dongles
 
-!["Image of Choir Device"](https://drive.google.com/file/d/1NgSpuMB-uqFbvj23xJk2UlCeeaauCkfK/view?usp=sharing)
+!["Image of Choir Device"](https://github.com/LindenLaboratory/Borealis/assets/134805131/ef70e348-94df-4059-9e00-1af15202dc58)!
+
 
 ---
 
