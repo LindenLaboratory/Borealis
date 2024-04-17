@@ -34,7 +34,7 @@ Borealis is a network designed to automate parallel processing and multi-compute
 - It also has two LEDs that are not required but increase the aesthetics
 - The _Conductor_ is contained in a custom 3d printed case
 
-![PXL_20240417_063655530](https://github.com/LindenLaboratory/Borealis/assets/134805131/b82220f8-0787-4ce2-8e37-19c6bcd15472)
+![PXL_20240417_063713813](https://github.com/LindenLaboratory/Borealis/assets/134805131/7038d596-d1d5-4208-95db-0270c9ff4247)
 
 ### Choir
 - The _Choir_ devices run on Raspberry Pi Pico Ws
