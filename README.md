@@ -1,5 +1,12 @@
-  # Borealis
-Borealis is a network designed to automate parallel processing and multi-computer control without needing a wifi network. The Borealis network contains 3 types of devices. See the descriptions of these below.
+# The Borealis Network
+Borealis is a network designed to automate parallel processing and multi-computer control without needing an internet connection. The Borealis network contains 2 types of devices, the _Conductor_ which gives commands and the _Choir_ which distributes the software that receives them.
+
+---
+
+## User's Guide
+- 
+
+---
 
 ## Borealis Devices
 
@@ -17,9 +24,27 @@ Borealis is a network designed to automate parallel processing and multi-compute
 - Once it is done (3-10s) the device can be disconnected
 - This allows the _Choir_ to run on the computer with no external devices connected
 
+---
+
+## Device Hardware
+
+### Conductor
+- The _Conductor_ runs on a Raspberry Pi Pico WH
+- The Pico is attatches to a breadboard and the 12 and 13 pins are connected to 2 tactile buttons in order to convert to termination or command terminal modes
+- It also has two LEDs that are not required but increase the aesthetics
+- The _Conductor_ is contained in a custom 3d printed case
+
+### Choir
+- The _Choir_ devices run on Raspberry Pi Pico Ws
+- They connect to computers via usb-to-microusb dongles
+
+!["Image of Choir Device"](https://drive.google.com/file/d/1NgSpuMB-uqFbvj23xJk2UlCeeaauCkfK/view?usp=sharing)
+
+---
+
 ## Eos* Protocol
 
-## Encryption Table
+### Encryption Table
 | Key | Value | Key | Value | Key | Value | Key | Value |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | 0 | 00 | a | 14 | k | 32 | u | 50 |
@@ -33,9 +58,7 @@ Borealis is a network designed to automate parallel processing and multi-compute
 | 8 | 12 | i | 30 | s | 44 |  |  |
 | 9 | 13 | j | 31 | t | 45 |  |  |
 
----
-
-## Format
+### Format
 
 1. Commands are formatted with a *prefix* and a *suffix*
     1. The p*refix* is the command that the slave devices run
@@ -49,7 +72,7 @@ Borealis is a network designed to automate parallel processing and multi-compute
     1. This is seen only with the *prefix “*code*”*
         1. In “code”, params are separated by “n”
 
-## Prefixes
+### Prefixes
 | Prefix | Function | Prefix | Function |
 | --- | --- | --- | --- |
 | type | Types out string | mousemove | Moves mouse to specified coordinates |
