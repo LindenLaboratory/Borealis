@@ -1,10 +1,5 @@
 # The Borealis Network
-Borealis is a network designed to automate parallel processing and multi-computer control without needing an internet connection. The Borealis network contains 2 types of devices, the _Conductor_ which gives commands and the _Choir_ which distributes the software that receives them.
-
----
-
-## User's Guide
-- 
+Borealis is a network designed to automate parallel processing and multi-computer control, running in the background to allow the devices connected to be used as normal while their computing power is used as they are connected to the database. The Borealis network contains 2 types of devices, the _Conductor_ which gives commands and the _Choir_ which distributes the software that receives them.
 
 ---
 
