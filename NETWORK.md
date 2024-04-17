@@ -17,7 +17,9 @@ This document explains how to setup and use the borealis network
 - First, set up the _Conductor_ as shown in the **Device Hardware** section of [the README](README.md)
 - Next, plug the _Conductor_ into your computer and [install micropython](https://www.raspberrypi.com/documentation/microcontrollers/micropython.html)
 - Finally, copy over the files from the _Conductor_ directory in [Thonny](https://projects.raspberrypi.org/en/projects/getting-started-with-the-pico/2)
-- When you plug in the _Conductor_, if you are holding down the green button (see **Device Hardware**) you can use Thonny to enter new commands in the command console (see **Command Console**) or edit the commands.txt file directly
+
+## Use
+- When you plug in the _Conductor_, if you are holding down the green button (see **Device Hardware**) you can use Thonny to enter new commands in the command console (see the **Eos** section of [the README](README.md)) or edit the commands.txt file directly
 - If you press the red button (see **Device Hardware**) it will change the command to "terminate" and the software will stop running on all slave computers and run dormant until the computer restarts
 - Now, to setup the _Choir_ device(s), connect a Raspberry Pi Pico to your computer via a Pico Dongle Lite and [install circuitpython](https://learn.adafruit.com/getting-started-with-raspberry-pi-pico-circuitpython/circuitpython) using the **choir.uf2** file
 - Now, to run the program on a program, simply plug the _Choir_ device into a computer and it will install itself
