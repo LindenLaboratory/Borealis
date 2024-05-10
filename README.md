@@ -27,7 +27,7 @@ Borealis is a network designed to automate parallel processing and multi-compute
 - The _Conductor_ runs on a Raspberry Pi Pico WH
 - The Pico is attatches to a breadboard and the 12 and 13 pins are connected to 2 tactile buttons in order to convert to termination or command terminal modes
 - It also has two LEDs that are not required but increase the aesthetics
-- The _Conductor_ is contained in a custom 3d printed case
+- The _Conductor_ is contained in a custom case but this is obviously not necessary
 
 | ![PXL_20240417_063655530](https://github.com/LindenLaboratory/Borealis/assets/134805131/663170ef-cc84-4967-9bd7-bbe6fd9982ce) |
 |-|
