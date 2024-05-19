@@ -1,0 +1,7 @@
+BTB-TXAR53
+borealis.pythonanywhere.com
+3
+5
+60
+120
+False
