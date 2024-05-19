@@ -13,11 +13,16 @@ Borealis is a network designed to automate parallel processing and multi-compute
 ### Choir
 - The _Choir_ is the final type of device making up the network
 - There will usually be more than one _Choir_ device on the network
-- The _Choir_ do not receive or process any commands
-- They only work on computers that use the Windows OS
-- When plugged into a computer it uses HID copy over the **Borealis** folder to the target computer and execute the program
-- Once it is done (3-10s) the device can be disconnected
-- This allows the _Choir_ to run on the computer with no external devices connected
+- _Choir_ devices have two modes:
+    - **HID Mode**
+        - The _Choir_ do not receive or process any commands
+        - They only work on computers that use the Windows OS
+        - When plugged into a computer it uses HID copy over the **Borealis** folder to the target computer and execute the program
+        - Once it is done (3-6s) the device can be disconnected
+        - This allows the _Choir_ to run on the computer with no external devices connected
+    - **FEEDBACK Mode**
+        - The _Choir_ now sends data to the _Conductor_
+        - The data is formatted as JSON and can add commands or log data with extra functionality easy to add from _main.py_ in _Conductor_. 
 
 ---
 
@@ -33,7 +38,8 @@ Borealis is a network designed to automate parallel processing and multi-compute
 |-|
 
 ### Choir
-- The _Choir_ devices run on Raspberry Pi Pico Ws
+- The _Choir_ devices run on Raspberry Pi Pico WHs
+- They are connected to Adafruit Proto Under Plate PiCowBells that allow you to make IoT devices for FEEDBACK mode more easily while still maintaining the small form factor
 - They connect to computers via usb-to-microusb dongles
 
 | ![PXL_20240417_063713813 (1)](https://github.com/LindenLaboratory/Borealis/assets/134805131/2b9ad80c-6e83-41e6-be2d-c6a034b5b5fc) |
