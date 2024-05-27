@@ -1,5 +1,5 @@
 BTB-TXAR53
-borealis.pythonanywhere.com
+Borealis
 3
 5
 60
