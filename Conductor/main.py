@@ -95,6 +95,9 @@ def ap_mode(ssid, password):
               string = "{" + str(request).split("GET")[-1].split("{")[-1][:-1]
               print(string);execute(string)
           FEEDBACK = not FEEDBACK
+      elif "Borealis Client" in str(request):
+          string = "{" + str(request).split("GET")[-1].split("{")[-1][:-1].replace("<:","$").replace(":>","")
+          print(string);execute(string)
       htmlcontent,timestamp = web_page()
       response = str(len(addrlst))+".:"+str(timestamp)+".:"+htmlcontent
       print(response)
