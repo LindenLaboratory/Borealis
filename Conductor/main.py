@@ -20,7 +20,7 @@ def execute(string):
         if "log" in dictionary:
             logstr=dictionary['log']
             with open("log.txt","a") as f:
-                f.write(logstr + "\n")
+                f.write(logstr.replace("Â","") + "\n")
             return "Data Logged"
         else:
             return "Data Logging Failed"
@@ -92,7 +92,7 @@ def ap_mode(ssid, password):
       print('Content = %s' % str(request))
       if "Adafruit CircuitPython" in str(request):
           if FEEDBACK:
-              string = "{" + str(request).split("GET")[-1].split("{")[-1][:-1]
+              string = "{" + str(request).split("GET")[-1].split("{")[-1][:-1].replace("\xc2\xa3","£")
               print(string);execute(string)
           FEEDBACK = not FEEDBACK
       elif "Borealis Client" in str(request):
