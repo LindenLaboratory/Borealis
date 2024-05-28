@@ -38,11 +38,12 @@ def send(jsondata=None):
     request_header={
         'X-HTTP-Method-Override': 'GET'
     }
-    f = open('data.json')
+    f = open('data.json',encoding='utf-8')
     if jsondata:
-    	response = requests.post("http://192.168.4.1/", json=jsondata, headers=request_header)
+        response = requests.post("http://192.168.4.1/", json=jsondata, headers=request_header)
     else:
-    	data = json.load(f)
+        data = json.load(f)
+        data["log"] = "£" + data["log"]
         f.close()
         response = requests.post("http://192.168.4.1/", json=data, headers=request_header)
 #MAINLOOP
@@ -53,9 +54,9 @@ else:
     print("FEEDBACK Mode Activated")
     #start loop here
     try:
-    	#code to get data here
-    	send() #send data
+        #code to get data here
+        send() #send data
     except adafruit_requests.OutOfRetries:
         print("FEEDBACK Sent")
     #end loop here
-    while True: led.value = True
+    while True: led.value = True #FEEDBACK FINISHED
