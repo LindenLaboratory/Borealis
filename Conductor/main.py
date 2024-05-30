@@ -15,12 +15,17 @@ FEEDBACK = True
 #FUNCTIONS
 def execute(string):
     dictionary = eval(string)
-    print("{[{",dictionary,type(dictionary),"}]}")
     def log(dictionary):
         if "log" in dictionary:
             logstr=dictionary['log']
-            with open("log.txt","a") as f:
-                f.write(logstr.replace("Â","") + "\n")
+            with open("log.txt","r") as f:
+                lines = f.readlines()
+                if len(lines) < 100:
+                    with open("log.txt","a") as f:
+                        f.write(logstr + "\n")
+                else:
+                    with open("log.txt","w") as f:
+                        f.write("".join(lines[1:])+logstr + "\n")
             return "Data Logged"
         else:
             return "Data Logging Failed"
@@ -51,7 +56,7 @@ def encrypt(string):
     return newstring
 def terminate(seconds):
     global commands
-    button = Pin(9, Pin.IN, Pin.PULL_UP)
+    button = Pin(16, Pin.IN, Pin.PULL_UP)
     while True:
         if button.value() == 0:
             commands = ["terminate"]
@@ -64,7 +69,6 @@ def web_page():
     for command in commands:
         if not "timestamp" in command and not "=" in command:
             html = html + encrypt(command.replace("\n","").replace("\r","")) + ";,"
-            print(list(command))
         else:
             if "=" in command:
                 t__ = int(command.split("=")[-1])
@@ -92,14 +96,22 @@ def ap_mode(ssid, password):
       print('Content = %s' % str(request))
       if "Adafruit CircuitPython" in str(request):
           if FEEDBACK:
-              string = "{" + str(request).split("GET")[-1].split("{")[-1][:-1].replace("\xc2\xa3","£")
-              print(string);execute(string)
+              string = "{" + str(request).split("GET")[-1].split("{")[-1][:-1]
+              execute(string)
           FEEDBACK = not FEEDBACK
       elif "Borealis Client" in str(request):
-          string = "{" + str(request).split("GET")[-1].split("{")[-1][:-1].replace("<:","$").replace(":>","")
-          print(string);execute(string)
+          string = "{" + str(request).split("GET")[-1].split("{")[-1][:-1]
+          execute(string)
       htmlcontent,timestamp = web_page()
-      response = str(len(addrlst))+".:"+str(timestamp)+".:"+htmlcontent
+      sitedir = str(request).split(" HTTP/1.1")[0].split(" ")[1]
+      if sitedir == "/log":
+          with open("log.txt","r") as f:
+              response = "".join(f.readlines())
+      elif sitedir == "/":
+          response = str(len(addrlst))+".:"+str(timestamp)+".:"+htmlcontent
+      else:
+          response = "Error 404"
+      response = response.replace(">:","£").replace(":<","").replace("<:","$").replace(":>","")
       print(response)
       conn.send(response)
       conn.close()
