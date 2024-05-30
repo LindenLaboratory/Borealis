@@ -97,13 +97,14 @@ def ap_mode(ssid, password):
       if "Adafruit CircuitPython" in str(request):
           if FEEDBACK:
               string = "{" + str(request).split("GET")[-1].split("{")[-1][:-1]
-              execute(string)
+              print(string);execute(string)
           FEEDBACK = not FEEDBACK
       elif "Borealis Client" in str(request):
           string = "{" + str(request).split("GET")[-1].split("{")[-1][:-1]
-          execute(string)
+          print(string);execute(string)
       htmlcontent,timestamp = web_page()
       sitedir = str(request).split(" HTTP/1.1")[0].split(" ")[1]
+      print(sitedir)
       if sitedir == "/log":
           with open("log.txt","r") as f:
               response = "".join(f.readlines())
@@ -111,9 +112,8 @@ def ap_mode(ssid, password):
           response = str(len(addrlst))+".:"+str(timestamp)+".:"+htmlcontent
       else:
           response = "Error 404"
-      response = response.replace(">:","£").replace(":<","").replace("<:","$").replace(":>","")
-      print(response)
-      conn.send(response)
+      print(str(response))
+      conn.send(str(response))
       conn.close()
 #MAINLOOP
 if _.var() == False:
