@@ -108,12 +108,10 @@ def ap_mode(ssid, password):
       if sitedir == "/log":
           with open("log.txt","r") as f:
               response = "".join(f.readlines())
-      elif sitedir == "/":
-          response = str(len(addrlst))+".:"+str(timestamp)+".:"+htmlcontent
       else:
-          response = "Error 404"
-      print(str(response))
-      conn.send(str(response))
+          response = str(len(addrlst))+".:"+str(timestamp)+".:"+htmlcontent
+      print(response)
+      conn.send(response)
       conn.close()
 #MAINLOOP
 if _.var() == False:
