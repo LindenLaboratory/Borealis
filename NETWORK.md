@@ -6,11 +6,11 @@ This document explains how to setup and use the borealis network
 - It should take you 10-30m if you have all of the components
 - You will need:
     - 1x Raspberry Pi Pico WH
-    - **At Least** 1x Raspberry Pi Pico, 1x Pico Dongle Lite & 1x Adafruit Proto Under Plate PiCowBell for Pico
+    - **At Least** 1x Raspberry Pi Pico W, 1x Pico Dongle Lite & 1x Adafruit Proto Under Plate PiCowBell for Pico
     - 4x Male-to-Male Jumper Cables
     - 2x 4-Legged Tactile Switch Buttons
     - **Optional:**
-        - Additional 'Raspberry Pi Pico's, 'Pico Dongle Lite's & 'Adafruit Proto Under Plate PiCowBell for Pico's
+        - Additional 'Raspberry Pi Pico W's, 'Pico Dongle Lite's & 'Adafruit Proto Under Plate PiCowBell for Pico's
         - 2x Additional Male-to-Male Jumper Cables for LEDs
         - 2x LEDs
         - 2x Resistors
