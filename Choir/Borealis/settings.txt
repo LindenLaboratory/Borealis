@@ -1,7 +1,7 @@
 BTB-TXAR53
 Borealis
 3
-5
+9
 60
 120
 True
