@@ -56,7 +56,7 @@ def encrypt(string):
     return newstring
 def terminate(seconds):
     global commands
-    button = Pin(16, Pin.IN, Pin.PULL_UP)
+    button = Pin(9, Pin.IN, Pin.PULL_UP)
     while True:
         if button.value() == 0:
             commands = ["terminate"]
