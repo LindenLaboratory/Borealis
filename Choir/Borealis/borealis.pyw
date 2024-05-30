@@ -37,14 +37,20 @@ def borealis(url):
 		print(e)
 		return False
 def decrypt(_):
-	decrypttable,lst = {"14":"a","15":"b","20":"c","21":"d","22":"e","23":"f","24":"g","25":"h","30":"i","31":"j","32":"k","33":"l","34":"m","35":"n","40":"o","41":"p","42":"q","43":"r","44":"s","45":"t","50":"u","51":"v","52":"w","53":"x","54":"y","55":"z","00":'0',"01":'1',"02":'2',"03":'3',"04":'4',"05":'5',"10":'6',"11":'7',"12":'8',"13":'9',"n.":"\n"},[]
-	for a,b in (_[i:i+2] for i in range(0, len(_), 2)):
-		if a+b in decrypttable:
-			lst.append(decrypttable[a+b])
+	decrypttable = {
+	"14": "a", "15": "b", "20": "c", "21": "d", "22": "e", "23": "f", "24": "g", "25": "h",
+	"30": "i", "31": "j", "32": "k", "33": "l", "34": "m", "35": "n", "40": "o", "41": "p",
+	"42": "q", "43": "r", "44": "s", "45": "t", "50": "u", "51": "v", "52": "w", "53": "x",
+	"54": "y", "55": "z", "00": '0', "01": '1', "02": '2', "03": '3', "04": '4', "05": '5',
+	"10": '6', "11": '7', "12": '8', "13": '9', "n.": "\n"}
+	lst = []
+	for i in range(0, len(_), 2):
+		pair = _[i:i+2]
+		if len(pair) == 2 and pair in decrypttable:
+			lst.append(decrypttable[pair])
 		else:
-			lst.append(b)
-	__ = "".join(lst)
-	return __
+			lst.append(pair)
+	return "".join(lst)
 def getfunc(prefix,suffix):
 	with open("funcdoc.eos","r") as f:
 		eosstr = f.readlines()[0]
