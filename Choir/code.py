@@ -43,7 +43,7 @@ def send(jsondata=None):
         response = requests.post("http://192.168.4.1/", json=jsondata, headers=request_header)
     else:
         data = json.load(f)
-        data["log"] = "£" + data["log"]
+        data["log"] = ">:" + data["log"] + ":<"
         f.close()
         response = requests.post("http://192.168.4.1/", json=data, headers=request_header)
 #MAINLOOP
