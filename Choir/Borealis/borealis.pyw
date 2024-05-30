@@ -49,7 +49,7 @@ def decrypt(_):
 		if len(pair) == 2 and pair in decrypttable:
 			lst.append(decrypttable[pair])
 		else:
-			lst.append(pair)
+			lst.append(_[i+1])
 	return "".join(lst)
 def getfunc(prefix,suffix):
 	with open("funcdoc.eos","r") as f:
