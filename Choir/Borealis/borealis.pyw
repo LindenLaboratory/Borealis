@@ -59,7 +59,7 @@ def getfunc(prefix,suffix):
 		result = locals()[prefix](suffix)
 		return result
 	else:
-		return 404
+		return "404"
 #MAINLOOP
 print("Choir Online")
 while True:
@@ -103,7 +103,7 @@ while True:
 	for prefix, suffix in commands.items():
 		prefix_,suffix_ = decrypt(str(prefix)),decrypt(str(suffix))
 		result = "<:"+getfunc(prefix_,suffix_)+":>"
-		if result != None:
+		if result != "<:404:>":
 			print(result)
 			STRING = result
 	commands = {}
