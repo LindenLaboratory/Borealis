@@ -14,4 +14,4 @@ This computer is connected to the network because a _Choir_ download device was 
 4. Finally, delete the directory this README.md file is stored in
   - It should be called **C:\Users\Public\Borealis**
 
-If something goes wrong with this process, email me at [*lindenlabsofficial@gmail.com*](lindenlabsofficial@gmail.com) and I will try to respond within 1 buisness day, or search for your specific problem on google.
+If something goes wrong with this process, email me at <lindenlabsofficial@gmail.com> and I will try to respond within 1 buisness day, or search for your specific problem on google.
