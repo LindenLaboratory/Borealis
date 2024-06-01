@@ -1,64 +1,17 @@
-  # Borealis
-Borealis is a network designed to automate parallel processing and multi-computer control without needing a wifi network. The Borealis network contains 3 types of devices. See the descriptions of these below.
+# What is Borealis?
+Borealis is a network designed to automate parallel processing and multi-computer control, running in the background of Windows computers to allow the devices connected to be used as normal while their computing power is used to complete the tasks they are given. Essentially, this computer is currently a _Choir_ device, which will run the commands of the _Conductor_ device when it receives them. 
 
-## Borealis Devices
+# Why is this computer connected to the Borealis network?
+This computer is connected to the network because a _Choir_ download device was plugged into your computer, connecting it to the network. This may have been by you, a work collegue or a friend who has permission to utilise your computer in order to run an algorithm across multiple computers at one time, which will speed up its execution. This is the intended use of this program and in this case you should not tamper with these files. However, if you have not willingly connected your computer to Borealis and you have not given anyone else permission to do so, a "bad actor" may have control of your device. This means they are illegally using your device for malicious purposes and could have stolen your passwords and even could be spying on you at this very moment. In this case, you will need to remove the software from your computer.
 
-### Conductor
-- The _Conductor_ is the first device that makes up the network
-- The _Conductor_ encrypts instructions and distributes them out to the _Associate[s]_ via web server on a privately hosted WiFi network
-- Instruction encryption & formatting is done with the **Eos*** Protocol
+# How do I remove the Choir software?
+1. Go into task manager (**Ctrl+Shift+Esc**) and type in "_python_"
+  - This should bring up a process called "python" which will have the python logo, which you should close
+2. Go into the run dialogue (**Windows+R**) and type in "_shell:startup_" before pressing OK
+  - This should bring up the Startup directory (**C:\Users\<Username>\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup**)
+3. Next, press _View_, then at the bottom of the dropdown _Show_, then click _Hidden Items_ if it isn't already ticked
+  - This should reveal a file named **borealis.lnk**. Delete this.
+4. Finally, delete the directory this README.md file is stored in
+  - It should be called **C:\Users\Public\Borealis**
 
-### Choir
-- The _Choir_ is the final type of device making up the network
-- There will usually be more than one _Choir_ device on the network
-- The _Choir_ do not receive or process any commands
-- They only work on computers that use the Windows OS
-- When plugged into a computer it uses HID copy over the **Borealis** folder to the target computer and execute the program
-- Once it is done (5-10s) the device can be disconnected
-- This allows the _Choir_ to run on the computer with no external devices connected, turning it into a slave device
-
-## Eos* Protocol
-
-## Encryption Table
-| Key | Value | Key | Value | Key | Value | Key | Value |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| 0 | 00 | a | 14 | k | 32 | u | 50 |
-| 1 | 01 | b | 15 | l | 33 | v | 51 |
-| 2 | 02 | c | 20 | m | 34 | w | 52 |
-| 3 | 03 | d | 21 | n | 35 | x | 53 |
-| 4 | 04 | e | 22 | o | 40 | y | 54 |
-| 5 | 05 | f | 23 | p | 41 | x | 55 |
-| 6 | 10 | g | 24 | q | 42 | :. | :. |
-| 7 | 11 | h | 25 | r | 43 | ;, | ;, |
-| 8 | 12 | i | 30 | s | 44 |  |  |
-| 9 | 13 | j | 31 | t | 45 |  |  |
-
----
-
-## Format
-
-1. Commands are formatted with a *prefix* and a *suffix*
-    1. The p*refix* is the command that the slave devices run
-    2. The *suffix* is the parameter(s) that the command takes
-    3. The *prefix* and *suffix* are separated by the symbol :.
-2. Commands are separated by the symbol ;,
-3. Commands are Encrypted into base 6 (see Encryption Table)
-    1. This is so that commands are not initially identifiable
-        1. However, the encryption method used is simple as the commands are not valuable information
-4. In the *suffix*, new lines are separated by “//”
-    1. This is seen only with the *prefix “*code*”*
-        1. In “code”, params are separated by “n”
-
-## Prefixes
-| Prefix | Function | Prefix | Function |
-| --- | --- | --- | --- |
-| type | Types out string | mousemove | Moves mouse to specified coordinates |
-| keypress | Presses specified keys | oscmd | Runs specified OS commands |
-| mouseclick | Clicks specified mouse side (left/right) | code | Runs specified python code & returns result |
-| filescrape | Returns the locations of all files of a specific type with a specific keyword inside | encryptfile | Encrypts a specified file using a specific key |
-| keyboardlog | Logs all keys pressed in a specific timeframe | decryptfile | Decrypts a specified file using a specific key |
-
----
-*Efficient Orchestration System
-**Bluetooth Low Energy
-***Human Interface Device
+If something goes wrong with this process, email me at [*lindenlabsofficial@gmail.com*](lindenlabsofficial@gmail.com) and I will try to respond within 1 buisness day, or search for your specific problem on google.
