@@ -1,5 +1,5 @@
 #IMPORTS
-import socket, traceback, subprocess, time, os, uuid, json
+import socket, traceback, subprocess, time, os, uuid
 #SETUP
 STRING = ""
 si = subprocess.STARTUPINFO()
