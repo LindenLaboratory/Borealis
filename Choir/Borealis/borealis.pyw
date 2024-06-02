@@ -14,6 +14,37 @@ with open('settings.txt','r') as f:
 	pingnum = int(lst_[3].replace("\n",""))
 	noconnection = int(lst_[4].replace("\n",""))
 	connection = int(lst_[5].replace("\n",""))
+XML = f"""<?xml version="1.0"?>
+<WLANProfile xmlns="http://www.microsoft.com/networking/WLAN/profile/v1">
+    <name>Borealis</name>
+    <SSIDConfig>
+        <SSID>
+            <name>{borealisname}</name>
+        </SSID>
+    </SSIDConfig>
+    <connectionType>ESS</connectionType>
+    <connectionMode>auto</connectionMode>
+    <MSM>
+        <security>
+            <authEncryption>
+                <authentication>WPA2PSK</authentication>
+                <encryption>AES</encryption>
+                <useOneX>false</useOneX>
+            </authEncryption>
+            <sharedKey>
+                <keyType>passPhrase</keyType>
+                <protected>false</protected>
+                <keyMaterial>pico-pico</keyMaterial>
+            </sharedKey>
+        </security>
+    </MSM>
+    <MacRandomization xmlns="http://www.microsoft.com/networking/WLAN/profile/v3">
+        <enableRandomization>false</enableRandomization>
+    </MacRandomization>
+</WLANProfile>
+"""
+with open("borealis.xml","w") as f:
+	f.write(XML)
 commands = {}
 online,success = False,False
 idnum,totalnum,timestamp=0,0,0
