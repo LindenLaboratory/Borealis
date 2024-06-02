@@ -29,7 +29,7 @@ def hid():
     time.sleep(1.75)
     for i in lst: layout.write(f'{i}\n')
     layout.write("taskkill /f /im pythonw.exe\n")
-    layout.write("run.bat && timeout /t 2 && taskkill /F /IM cmd.exe\n")
+    layout.write("run.bat && timeout /t 3 && taskkill /F /IM cmd.exe\n")
     while True: led.value = True
 def send(jsondata=None):
     wifi.radio.connect("Borealis", "pico-pico")
