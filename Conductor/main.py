@@ -9,6 +9,8 @@ from machine import Pin
 import json
 #SETUP
 addrlst = []
+with open("settings.txt","r") as f: 
+    NAME = f.readline().strip()
 with open('commands.txt',"r") as f:
     commands = f.readlines()
 FEEDBACK = True
@@ -118,17 +120,17 @@ def ap_mode(ssid, password):
       conn.close()
 #MAINLOOP
 if _.var() == False:
-    print("Borealis Online (acc #01)")
+    print(f"Borealis Online (acc #01)\nRunning on name '{NAME}'")
     _thread.start_new_thread(terminate,[0.5])
-    ap_mode('Borealis',
+    ap_mode(NAME,
         'pico-pico')
 else:
     addcmd = __.run(commands)
     if addcmd != False:
         commands = addcmd
-        print("Borealis Online (acc #02)")
+        print(f"Borealis Online (acc #02)\nRunning on name '{NAME}'")
         _thread.start_new_thread(terminate,[0.5])
-        ap_mode('Borealis',
+        ap_mode(NAME,
         'pico-pico')
     else:
         with open("commands.txt","w") as f:
