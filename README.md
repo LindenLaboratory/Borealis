@@ -1,5 +1,10 @@
 # The Borealis Network
-Borealis is a network designed to automate parallel processing and multi-computer control, running in the background of Windows computers to allow the devices connected to be used as normal while their computing power is used to complete the tasks they are given. The Borealis network contains 2 types of devices, the _Conductor_ which gives commands and the _Choir_ which distributes the software that receives them. It also contains the _Audience_ which is a program which fetches and logs the _Conductor_'s data.
+Borealis is a network designed to automate parallel processing and multi-computer control, running in the background of Windows computers to allow the devices connected to be used as normal while their computing power is used to complete the tasks they are given. The Borealis network contains 3 types of devices:
+- the _Conductor_ which gives commands
+- the _Choir_ which distributes the software that receives them in HID mode and acts as an IoT device than can communicate with the conductor in FEEDBACK.
+- the _Composer_ which receives commands over the intenet via Telegram and transmits them to the _Conductor_
+
+It also contains the _Audience_ which is a program which fetches and logs the _Conductor_'s data.
 
 ---
 
