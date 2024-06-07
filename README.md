@@ -35,9 +35,8 @@ It also contains the _Audience_ which is a program which fetches and logs the _C
 
 ### Conductor
 - The _Conductor_ runs on a Raspberry Pi Pico WH
-- The Pico is attatches to a breadboard and the 12 and 13 pins are connected to 2 tactile buttons in order to convert to termination or command terminal modes
+- The Pico is attatches to a breadboard and the 12 and 13 pins are connected to 2 tactile buttons in order to convert to termination (red) or command terminal (green) modes
 - It also has two LEDs that are not required but increase the aesthetics
-- The _Conductor_ is contained in a custom case but this is obviously not necessary
 
 |![WhatsApp Image 2024-05-22 at 07 12 53](https://github.com/LindenLaboratory/Borealis/assets/134805131/91e96973-261a-4a66-8a9f-2fbef3004be1) |
 |-|
@@ -48,6 +47,14 @@ It also contains the _Audience_ which is a program which fetches and logs the _C
 - They connect to computers via usb-to-microusb dongles
 
 |![WhatsApp Image 2024-05-22 at 07 13 18](https://github.com/LindenLaboratory/Borealis/assets/134805131/af757cbc-e3f0-47ea-8855-9352ee12a80e) |
+|-|
+
+### Composer
+- The _Composer_ runs on a Raspberry Pi Pico WH
+- The Pico is attatches to a breadboard and the 12 and 13 pins are connected to 2 tactile buttons in order to fetch network password (blue) or disable the device (yellow)
+- It also has two LEDs that are not required but increase the aesthetics
+
+| ![WhatsApp Image 2024-06-07 at 19 14 10](https://github.com/LindenLaboratory/Borealis/assets/134805131/cf6b4b1c-9a3c-49d4-9464-11070ad659e7) |
 |-|
 
 ---
