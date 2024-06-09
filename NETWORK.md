@@ -19,6 +19,7 @@ This document explains how to setup and use the borealis network
 - Next, plug the _Conductor_ into your computer and [install micropython](https://www.raspberrypi.com/documentation/microcontrollers/micropython.html).
 - Finally, copy over the files from the _Conductor_ directory in [Thonny](https://projects.raspberrypi.org/en/projects/getting-started-with-the-pico/2).
 - Setup the _Composer_ in the same way but with different coloured wires to distinguish the two, [installing circuitpython](https://learn.adafruit.com/getting-started-with-raspberry-pi-pico-circuitpython/circuitpython) instead of micropython and copying over the files from the _Composer_ directory.
+- You also need to make a telegram bot and change the bot token to your new bot's token, or you can use the default but this will connect your Borealis network to the wider internet so anyone using it will be able to access your network
 - Now, to setup the _Choir_ device(s), connect a Raspberry Pi Pico to your computer via a Pico Dongle Lite and [install circuitpython](https://learn.adafruit.com/getting-started-with-raspberry-pi-pico-circuitpython/circuitpython). Then, upload the files from the _Choir_ directory - you can do this in file manager.
 
 ## Use
