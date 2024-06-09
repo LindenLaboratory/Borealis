@@ -1,0 +1,4 @@
+Adafruit CircuitPython 9.0.2 on 2024-03-28; Raspberry Pi Pico W with rp2040
+Board ID:raspberry_pi_pico_w
+UID:E6633861A3968C2C
+MAC:D8:3A:DD:9F:86:8D
