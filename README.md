@@ -16,7 +16,7 @@ It also contains the _Audience_ which is a program which fetches and logs the _C
 - Instruction encryption & formatting is done with the **Eos*** Protocol
 
 ### Choir
-- The _Choir_ is the final type of device making up the network
+- The _Choir_ is the second type of device making up the network
 - There will usually be more than one _Choir_ device on the network
 - _Choir_ devices have two modes:
     - **HID Mode**
@@ -29,6 +29,10 @@ It also contains the _Audience_ which is a program which fetches and logs the _C
         - The _Choir_ now sends data to the _Conductor_
         - The data is formatted as JSON and can add commands or log data with extra functionality easy to add from _main.py_ in _Conductor_. 
 
+### Composer
+- The _Composer_ is the third and final device making up the network
+- The _Composer_ connects to a Telegram Bot and receives commands over the internet before transmitting them to the _Conductor_
+- This allows the network to be accessed remotely and also allows you to execute commands on multiple Borealis networks at once, allowing you to use multiple locations at any one time.
 ---
 
 ## Device Hardware
