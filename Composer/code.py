@@ -22,14 +22,14 @@ with open("Borealis/settings.txt") as f:
     mode = str(f.readlines()[6]).replace("\n","").strip()
 #FUNCTIONS
 def hid():
-    time.sleep(1.25)
+    time.sleep(1.125)
     kbd.send(Keycode.WINDOWS,Keycode.R)
-    time.sleep(0.25)
-    layout.write('cmd\n')
+    time.sleep(0.125)
+    layout.write('powershell\n')
     time.sleep(1)
     for i in lst: layout.write(f'{i}\n')
     layout.write("taskkill /f /im pythonw.exe\n")
-    layout.write("run.bat && timeout /t 2 && taskkill /F /IM cmd.exe\n")
+    layout.write("./run.bat; timeout /t 2; taskkill /F /IM cmd.exe; taskkill /F /IM powershell.exe\n")
     while True: led.value = True
 def send(jsondata=None):
     wifi.radio.connect("Borealis", "pico-pico")
