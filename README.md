@@ -101,8 +101,8 @@ It also contains the _Audience_ which is a program which fetches and logs the _C
 | mouseclick | Clicks specified mouse side (left/right) | code | Runs specified python code & returns result |
 | filescrape | Returns the locations of all files of a specific type with a specific keyword inside | encryptfile | Encrypts a specified file using a specific key |
 | keyboardlog | Logs all keys pressed in a specific timeframe | decryptfile | Decrypts a specified file using a specific key |
-| passgrab | Returns all accounts saved to google and their associated passwords as well as wifi password | mockery | Sets volume to specified value, plays video (default is "Smooth Criminal") and crashes computer |
-| terminate | Removes all evidence of the virus within the specified number of seconds | datagrab | Returns gps coordinates, screenshot of current screen, ip address, mac address and device model |
+| terminate | Removes all Choir software, including all files, after the specified number of seconds | datagrab | Returns gps coordinates, screenshot of current screen, ip address, mac address and device model |
+| passgrab | Returns all accounts saved to google and their associated passwords as well as wifi password |  |  |
 
 ---
 *Efficient Orchestration System
