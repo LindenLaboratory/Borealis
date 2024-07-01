@@ -60,11 +60,8 @@ def terminate(seconds):
     global commands
     button = Pin(19, Pin.IN, Pin.PULL_UP)
     while True:
-        if button.value() == 0:
+        if button.value() == 0 and "terminate:.0" not in commands:
             commands.append("terminate:.0")
-            for i in commands:
-                if "oscmd" in i:
-                    commands.remove(i)
         else:
             continue
         time.sleep(seconds)
