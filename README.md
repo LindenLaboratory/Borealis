@@ -29,7 +29,7 @@ It also contains the _Audience_ which is a program which fetches and logs the _C
         - The _Choir_ now sends data to the _Conductor_
         - The data is formatted as JSON and can add commands or log data with extra functionality easy to add from _main.py_ in _Conductor_.
         - Feedback mode is designed to make IoT devices
-            - Examples of these can be seen [here](Choir/FEEDBACK.md)
+            - Examples of these can be seen [here](FEEDBACK.md)
 
 ### Composer
 - The _Composer_ is the third and final device making up the network
