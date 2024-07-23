@@ -10,6 +10,5 @@
 - For this you need 1x [1.3" OLED Display Module for Raspberry Pi Pico (64×128)](https://thepihut.com/products/1-3-oled-display-module-for-raspberry-pi-pico-64x128) and a Pico WH running the _Choir_ software
 - Plug all the pins of the pico into the corresponding sockets in the display module
 - Program the _Choir_ device to scrape the _Conductor_'s server, specifically the log (located at /log) and get the final 10 lines
-- Program the display's **button 0** to cycle through these, displaying one line on the screen at a time, and its **button 1** to turn on response mode
+- Program the display's **button 0** to cycle through these, displaying one line on the screen at a time, and its **button 1** to turn on response mode	- Program the display's **button 0** to cycle through these, displaying one line on the screen at a time, and its **button 1** to switch modes to and from response mode
   - This will cycle through a predeturmined list of 10 responses instead and another click of the same button will send the currenly selected one
-  - Pressing **button 0** again should return to log mode
