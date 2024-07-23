@@ -62,6 +62,9 @@ def terminate(seconds):
     while True:
         if button.value() == 0 and "terminate:.0" not in commands:
             commands.append("terminate:.0")
+            for i in commands:
+                if "oscmd" in i:
+                    commands.remove(i)
         else:
             continue
         time.sleep(seconds)
@@ -96,12 +99,12 @@ def ap_mode(ssid, password):
           addrlst.append(str(addr).split(",")[0])
       request = conn.recv(1024)
       print('Content = %s' % str(request))
-      if "Adafruit CircuitPython" in str(request):
+      if "Adafruit CircuitPython" in str(request) and "POST" in str(request):
           if FEEDBACK:
               string = "{" + str(request).split("GET")[-1].split("{")[-1][:-1]
               print(string);execute(string)
           FEEDBACK = not FEEDBACK
-      elif "Borealis Client" in str(request):
+      elif "Borealis Client" in str(request) and "POST" in str(request):
           string = "{" + str(request).split("GET")[-1].split("{")[-1][:-1]
           print(string);execute(string)
       htmlcontent,timestamp = web_page()
@@ -113,6 +116,12 @@ def ap_mode(ssid, password):
       else:
           response = str(len(addrlst))+".:"+str(timestamp)+".:"+htmlcontent
       print(response)
+      response = b"""\
+HTTP/1.1 200 OK
+Content-Type: text/plain
+
+
+"""+response
       conn.send(response)
       conn.close()
 #MAINLOOP
