@@ -116,13 +116,13 @@ def ap_mode(ssid, password):
       else:
           response = str(len(addrlst))+".:"+str(timestamp)+".:"+htmlcontent
       print(response)
-      response = b"""\
-HTTP/1.1 200 OK
-Content-Type: text/plain
-
-
-"""+response
-      conn.send(response)
+      responsefinal = f"""\
+HTTP/1.1 200 OK\r
+Content-Type: text/plain\r
+Content-Length: {len(response)}\r
+\r
+{response}"""
+      conn.send(responsefinal.encode('utf-8'))
       conn.close()
 #MAINLOOP
 if _.var() == False:
