@@ -99,7 +99,9 @@ while True:
 			subprocess.call('netsh wlan add profile filename="borealis.xml"', startupinfo=si)
 			subprocess.call(f"netsh wlan connect {borealisname}", startupinfo=si)
 			time.sleep(pingnum)
-			idnum,timestamp = int(str(borealis("192.168.4.1")).split(".:")[0].split("'")[-1]),int(str(borealis("192.168.4.1")).split(".:")[1].split("'")[-1])
+			eosstr__="'"+str(borealis("192.168.4.1")).split("\\n")[-1]
+			print(eosstr__)
+			idnum,timestamp = int(eosstr__.split(".:")[0].split("'")[-1]),int(str(borealis("192.168.4.1")).split(".:")[1].split("'")[-1])
 			print(str(idnum),str(timestamp))
 			subprocess.call(f"netsh wlan connect {wifi}", startupinfo=si)
 			time.sleep(noconnection-pingnum)
@@ -122,6 +124,7 @@ while True:
 		time.sleep(noconnection-sleepnum)
 		if not success:
 			sleepnum=sleepnum+0.5
+			print(f"Fetching Commands Failed; Trying again with {sleepnum} increment")
 		continue
 	subprocess.call(f"netsh wlan connect {wifi}", startupinfo=si)
 	eosstr = str(eosstr).replace("b'","")[0:-3].split(".:")[2]
