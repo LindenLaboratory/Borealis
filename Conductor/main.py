@@ -6,8 +6,8 @@ import mode as _
 import connect as __
 import _thread
 from machine import Pin
-import microcontroller
 import json
+import machine
 #SETUP
 addrlst = []
 with open("settings.txt","r") as f: 
@@ -67,7 +67,7 @@ def terminate(seconds):
                 if "oscmd" in i:
                     commands.remove(i)
         elif _.var() == True:
-            microcontroller.reset()
+            machine.reset()
         else:
             continue
         time.sleep(seconds)
