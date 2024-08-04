@@ -182,9 +182,10 @@ def mainloop(apps):
     while True:
         display_splash(display,"App Store","v0.0.1")
         if apps == None:
-            display.clear()
+            display_clear_all(display)
             display_line1(display,"Getting Apps...")
             display.show()
+            apps.remove("")
             apps = [app.replace(":.","\n") for app in get("/app/list").split("\n")]
         display_splash_perm(display,"App Store Online",len(apps)+" Apps")
         line = None
@@ -219,7 +220,7 @@ while True:
         print("Connected")
         display_line1(display, "Connected")
         display.show()
-        line,error = "503",2
+        error,line = "503",2
         username = getaccount()
         if username == None:
             print("Getting Account")
@@ -246,6 +247,7 @@ while True:
             display_line2(display, "Getting Apps")
             display.show()
             apps = [app.replace(":.","\n") for app in get("/app/list").split("\n")]
+            print(apps)
         line,error = 3,"503"
         print("Fetching Stats")
         display_line3(display, "Fetching Stats")
@@ -263,7 +265,7 @@ while True:
         line = 1
         display_splash(display,"Borealis","v1.2.1")
         display_splash(display,username,money)
-        mainloop(stats)
+        mainloop(apps)
         continue
     except Exception as e:
         print(e)
