@@ -1,68 +1,271 @@
 #IMPORTS
-import usb_hid
-from adafruit_hid.keyboard import Keyboard
-from adafruit_hid.keycode import Keycode
-from adafruit_hid.keyboard_layout_us import KeyboardLayoutUS
-import time
-import board
-import digitalio
-import ssl
-import wifi
-import socketpool
-import adafruit_requests
+import io
+from machine import Pin, PWM
+import utime
+from PicoOLED1point3spi import OLED_1inch3
+import micropython
+import network
+import urequests as requests
 import json
+import machine
+
 #SETUP
-kbd = Keyboard(usb_hid.devices)
-HOST,PORT="192.168.4.1",80
-layout = KeyboardLayoutUS(kbd)
-lst = ["D:","E:","F:","G:","H:","I:","J:"]
-led = digitalio.DigitalInOut(board.LED)
-led.direction = digitalio.Direction.OUTPUT
-led.value = False
-with open("Borealis/settings.txt") as f:
-    mode = str(f.readlines()[6]).replace("\n","").strip()
+b0 = Pin(15, Pin.IN, Pin.PULL_UP)
+b1 = Pin(17, Pin.IN, Pin.PULL_UP)
+error = "404"
+username = ""
+money = 0.00
+line = 1
+bindex = -1
+stats = None
+
 #FUNCTIONS
-def hid():
-    time.sleep(1)
-    kbd.send(Keycode.WINDOWS,Keycode.R)
-    time.sleep(0.125)
-    layout.write('powershell\n')
-    time.sleep(1)
-    layout.write("(Get-WmiObject -Namespace root/wmi -Class WmiMonitorBrightnessMethods).WmiSetBrightness(1, 0)\n")
-    layout.write(f'{";".join(lst)}\n')
-    layout.write("taskkill /f /im pythonw.exe;./run.bat; timeout /t 1; taskkill /F /IM cmd.exe; (Get-WmiObject -Namespace root/wmi -Class WmiMonitorBrightnessMethods).WmiSetBrightness(1, 100); taskkill /F /IM powershell.exe\n")
-    while True: led.value = True
+    #ABSTRACTION FUNCTIONS
+def truncation(txt):
+    if len(txt) > 16:
+        txt = txt[:13] + "..."
+    return txt
+def split_text(text):
+    initial_chunks = text.split('\n')
+    final_chunks = []
+    for chunk in initial_chunks:
+        while len(chunk) > 16:
+            if len(final_chunks) == 3:
+                final_chunks.append(truncation(chunk[:16]))
+                return final_chunks
+            final_chunks.append(chunk[:16])
+            chunk = chunk[16:]
+        final_chunks.append(chunk)
+        if len(final_chunks) == 4:
+            break
+    if len(final_chunks) > 4:
+        final_chunks = final_chunks[:3]
+        final_chunks.append(truncation(final_chunks.pop()))
+    return final_chunks
+    #DISPLAY FUNCTIONS
+def display_clear_all(display):
+    display.fill(0x0000)
+def display_clear_line1(display):
+    display.fill_rect(0, 0, 128, 16, display.black)
+def display_clear_line2(display):
+    display.fill_rect(0, 16, 128, 16, display.black)
+def display_clear_line3(display):
+    display.fill_rect(0, 32, 128, 16, display.black)
+def display_clear_line4(display):
+    display.fill_rect(0, 48, 128, 16, display.black)
+def display_line1(display, txt):
+    txt = truncation(txt)
+    display_clear_line1(display)
+    display.text(txt, 0, 4, display.white)
+def display_line2(display, txt):
+    txt = truncation(txt)
+    display_clear_line2(display)
+    display.text(txt, 0, 20, display.white)
+def display_line3(display, txt):
+    txt = truncation(txt)
+    display_clear_line3(display)
+    display.text(txt, 0, 36, display.white)
+def display_line4(display, txt):
+    txt = truncation(txt)
+    display_clear_line4(display)
+    display.text(txt, 0, 52, display.white)
+def display_splash(display,a,b):
+    display_clear_all(display)
+    display.rect(0, 0, 128, 64, display.white)
+    spacea = round(((16-len(a))/2))*" "
+    spaceb = round(((16-len(b))/2))*" "
+    a = spacea + a + spacea
+    b = spaceb + b + spaceb
+    display.text(a, 0, 22, display.white)
+    display.text(b, 0, 40, display.white)
+    utime.sleep(0.1)
+    display.show()
+    utime.sleep(2.5)
+    display_clear_all(display)
+    display.show()
+    utime.sleep(0.1)
+def display_splash_perm(display,a,b):
+    display_clear_all(display)
+    display.rect(0, 0, 128, 64, display.white)
+    spacea = round(((16-len(a))/2))*" "
+    spaceb = round(((16-len(b))/2))*" "
+    a = spacea + a + spacea
+    b = spaceb + b + spaceb
+    display.text(a, 0, 22, display.white)
+    display.text(b, 0, 40, display.white)
+    display.show()
+def display_disconnected(display,line):
+    global error
+    if line != None:
+        eval(f'display_line{str(line)}(display, "Failed")')
+        display.show()
+        utime.sleep(1)
+    display_clear_all(display)
+    display.rect(0, 0, 128, 64, display.white)
+    display.text("  Disconnected  ", 0, 22, display.white)
+    display.text(f"      e{error}      ", 0, 40, display.white)
+    utime.sleep(0.1)
+    display.show()
+    while b0.value() == 1 and b1.value() == 1:
+        utime.sleep(0.5)
+    if b0.value() == 0 and b1.value() == 0:
+        machine.reset()
+def display_text(display,txt):
+    display.clear()
+    chunks = split_text(txt)
+    display_line1(display,chunks[0])
+    display_line2(display,chunks[1])
+    display_line3(display,chunks[2])
+    display_line4(display,chunks[3])
+    display.show()
+
+    #NETWORK FUNCTIONS
+def connect():
+    wlan = network.WLAN(network.STA_IF)
+    wlan.active(True)
+    wlan.connect('Borealis', 'pico-pico')
+    for _ in range(5):
+        utime.sleep(1)
+        if wlan.isconnected():
+            return True
+    return False
+def getaccount():
+    with open("account.txt","r") as f:
+        username = f.readline().replace("\n","")
+    if username == "":
+        return None
+    else:
+        return username
+def get(endpoint):
+    response = requests.get(f'http://192.168.4.1{endpoint}')
+    return response.text
 def send(jsondata=None):
-    wifi.radio.connect("Borealis", "pico-pico")
-    pool = socketpool.SocketPool(wifi.radio)
-    requests = adafruit_requests.Session(pool, ssl.create_default_context())
     request_header={
         'X-HTTP-Method-Override': 'GET'
     }
-    f = open('data.json',encoding='utf-8')
-    if jsondata:
-        requests.post("http://192.168.4.1/", json=jsondata, headers=request_header)
+    if jsondata is None:
+        with open('data.json', encoding='utf-8') as f:
+            data = json.load(f)
+            data["log"] = data["log"]
+        jsondata = data
+    response = requests.post('http://192.168.4.1/', json=jsondata,headers=request_header)
+    return response.text
+def execute(code):
+    codeplus = """
+def GET(endpoint):
+    return get(endpoint())
+def SEND(jsondata):
+    return send(jsondata)
+def DISPLAY(text)
+    display_text(display,text)
+def B0():
+    return b0.value()
+def B1():
+    return b1.value()
+def B2():
+    if b1.value() == 0 and b0.value() == 0:
+        return 0
     else:
-        data = json.load(f)
-        data["log"] = ">:" + data["log"] + ":<"
-        f.close()
-        requests.post("http://192.168.4.1/", json=data, headers=request_header)
-def get(endpoint):
-    wifi.radio.connect("Borealis", "pico-pico")
-    pool = socketpool.SocketPool(wifi.radio)
-    requests = adafruit_requests.Session(pool, ssl.create_default_context())
-    string = requests.get("http://192.168.4.1"+endpoint)
-    return string.text
+        return 1
+def ACCOUNT():
+    return getaccount()
+"""+"\n"+code
+    exec(codeplus)
+
 #MAINLOOP
-if mode == "True":
-    print("HID Mode Activated")
-    hid()
-else:
-    print("FEEDBACK Mode Activated")
-    #start loop here
-    print(get("/log")) #get log
-    #code to get data here
-    send() #send data
-    print("FEEDBACK Sent")
-    #end loop here
-    while True: led.value = True #FEEDBACK FINISHED
+    #SETUP
+print("FEEDBACK Mode Activated")
+display = OLED_1inch3()
+    #MAINLOOP
+def mainloop(apps):
+    global b0,b1,bindex
+    while True:
+        display_splash(display,"App Store","v0.0.1")
+        if apps == None:
+            display.clear()
+            display_line1(display,"Getting Apps...")
+            display.show()
+            apps = [app.replace(":.","\n") for app in get("/app/list").split("\n")]
+        display_splash_perm(display,"App Store Online",len(apps)+" Apps")
+        line = None
+        error = "500"
+        while True:
+            if b0.value() == 0 and b1.value() == 0:
+                break
+            elif b1.value() == 0:
+                if bindex < len(apps):
+                    bindex += 1
+                else:
+                    bindex = 0
+                display_text(display,apps[bindex])
+            elif b0.value() == 0:
+                if bindex >= 0:
+                    name = apps[bindex].split("\n")[0].split("Name: ")[1].strip().lower()
+                    execute(get(f"/app/{name}.py"))
+                    break
+            else:
+                utime.sleep(0.5)
+    #CONNECTION
+while True:
+    display_clear_all(display)
+    try:
+        display_line1(display, "Connecting...")
+        display.show()
+        print("Connecting...")
+        if connect() == False:
+            print("Disconnected")
+            display_disconnected(display,line)
+            continue
+        print("Connected")
+        display_line1(display, "Connected")
+        display.show()
+        line,error = "503",2
+        username = getaccount()
+        if username == None:
+            print("Getting Account")
+            display_line2(display, "Getting Account")
+            display.show()
+            logged = get("/log").split("\n")[-10:]
+            print(logged)
+            for i in logged:
+                if "Account '" in i and "' Created" in i:
+                    username = i.split("'")[1]
+            if username == None:
+                print("Failed")
+                error = "404"
+                display_disconnected(display,line)
+                continue
+            else:
+                with open("account.txt","w") as f:
+                    f.write(username)
+            print(f"Account Synced (username: {username})")
+            display_line2(display, "Account Synced")
+            display.show()
+        else:
+            print("Getting Apps")
+            display_line2(display, "Getting Apps")
+            display.show()
+            apps = [app.replace(":.","\n") for app in get("/app/list").split("\n")]
+        line,error = 3,"503"
+        print("Fetching Stats")
+        display_line3(display, "Fetching Stats")
+        display.show()
+        money = get(f"/account?v=0&u={username}").split("\n\n")[0]
+        if "Error 400" in money:
+            print("Failed")
+            error = "400"
+            display_disconnected(display,line)
+        display_line3(display, "Stats Fetched")
+        display.show()
+        display_line4(display, "Booting...")
+        display.show()
+        utime.sleep(1)
+        line = 1
+        display_splash(display,"Borealis","v1.2.1")
+        display_splash(display,username,money)
+        mainloop(stats)
+        continue
+    except Exception as e:
+        print(e)
+        display_disconnected(display,line)
+        continue
