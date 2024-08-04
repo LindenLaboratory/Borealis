@@ -1,7 +1,0 @@
-BTB-TXAR53
-Borealis
-3
-9
-60
-120
-True
