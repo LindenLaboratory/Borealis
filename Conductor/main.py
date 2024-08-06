@@ -22,7 +22,6 @@ with open("settings.txt", "r") as f:
 with open('commands.txt', "r") as f:
     commands = f.readlines()
 
-FEEDBACK = True
 UPLOAD_DIR = "/app"
 
 #FUNCTIONS
@@ -158,10 +157,8 @@ def ap_mode(ssid, password):
         request = conn.recv(1024)
         print('Content = %s' % str(request))
         if "Adafruit CircuitPython" in str(request) and "POST" in str(request):
-            if FEEDBACK:
-                string = "{" + str(request).split("GET")[-1].split("{")[-1][:-1]
-                print(string); execute(string)
-            FEEDBACK = not FEEDBACK
+            string = "{" + str(request).split("GET")[-1].split("{")[-1][:-1]
+            print(string); execute(string)
         elif "Borealis Client" in str(request) and "POST" in str(request):
             string = "{" + str(request).split("GET")[-1].split("{")[-1][:-1]
             print(string); execute(string)
