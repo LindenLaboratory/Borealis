@@ -97,6 +97,8 @@ def display_splash_perm(display,a,b):
 def display_disconnected(display,line):
     global error
     if line != None:
+        if line == 1:
+            display_clear_all(display)
         eval(f'display_line{str(line)}(display, "Failed")')
         display.show()
         utime.sleep(1)
@@ -107,16 +109,19 @@ def display_disconnected(display,line):
     utime.sleep(0.1)
     display.show()
     while b0.value() == 1 and b1.value() == 1:
-        utime.sleep(0.5)
+        utime.sleep(0.1)
     if b0.value() == 0 and b1.value() == 0:
         machine.reset()
 def display_text(display,txt):
-    display.clear()
+    display_clear_all(display)
     chunks = split_text(txt)
-    display_line1(display,chunks[0])
-    display_line2(display,chunks[1])
-    display_line3(display,chunks[2])
-    display_line4(display,chunks[3])
+    try:
+        display_line1(display,chunks[0])
+        display_line2(display,chunks[1])
+        display_line3(display,chunks[2])
+        display_line4(display,chunks[3])
+    except:
+        pass
     display.show()
 
     #NETWORK FUNCTIONS
@@ -150,14 +155,16 @@ def send(jsondata=None):
         jsondata = data
     response = requests.post('http://192.168.4.1/', json=jsondata,headers=request_header)
     return response.text
-def execute(code):
+def execute(code,display):
     codeplus = """
 def GET(endpoint):
-    return get(endpoint())
+    return get(endpoint)
 def SEND(jsondata):
     return send(jsondata)
-def DISPLAY(text)
+def DISPLAY(text):
+    print(text)
     display_text(display,text)
+    utime.sleep(0.25)
 def B0():
     return b0.value()
 def B1():
@@ -169,7 +176,10 @@ def B2():
         return 1
 def ACCOUNT():
     return getaccount()
-"""+"\n"+code
+"""+"\n"+code.replace("\t","  ")
+    print(codeplus)
+    display_clear_all(display)
+    display.show()
     exec(codeplus)
 
 #MAINLOOP
@@ -177,35 +187,44 @@ def ACCOUNT():
 print("FEEDBACK Mode Activated")
 display = OLED_1inch3()
     #MAINLOOP
-def mainloop(apps):
-    global b0,b1,bindex
+def mainloop(apps,display):
+    global b0,b1,bindex,line
+    display_clear_all(display)
+    display_text(display,"Syncing with network...")
+    display.show()
+    wlan = network.WLAN(network.STA_IF)
+    wlan.disconnect()
+    connect()
     while True:
         display_splash(display,"App Store","v0.0.1")
         if apps == None:
             display_clear_all(display)
             display_line1(display,"Getting Apps...")
             display.show()
+            apps = [app.replace(":.","\n").replace("\r","") for app in get("/app/list").split("\n")]
             apps.remove("")
-            apps = [app.replace(":.","\n") for app in get("/app/list").split("\n")]
-        display_splash_perm(display,"App Store Online",len(apps)+" Apps")
+        display_splash_perm(display,"App Store",str(len(apps))+" Apps")
         line = None
         error = "500"
         while True:
             if b0.value() == 0 and b1.value() == 0:
                 break
             elif b1.value() == 0:
-                if bindex < len(apps):
+                if bindex < len(apps)-1:
                     bindex += 1
                 else:
                     bindex = 0
+                print(bindex)
                 display_text(display,apps[bindex])
+                utime.sleep(0.15)
             elif b0.value() == 0:
                 if bindex >= 0:
                     name = apps[bindex].split("\n")[0].split("Name: ")[1].strip().lower()
-                    execute(get(f"/app/{name}.py"))
+                    execute(get(f"/app/{name}.py"),display)
+                    apps = None
                     break
             else:
-                utime.sleep(0.5)
+                utime.sleep(0.1)
     #CONNECTION
 while True:
     display_clear_all(display)
@@ -224,7 +243,7 @@ while True:
         username = getaccount()
         if username == None:
             print("Getting Account")
-            display_line2(display, "Getting Account")
+            display_line2(display, "Getting Account...")
             display.show()
             logged = get("/log").split("\n")[-10:]
             print(logged)
@@ -244,13 +263,16 @@ while True:
             display.show()
         else:
             print("Getting Apps")
-            display_line2(display, "Getting Apps")
+            display_line2(display, "Getting Apps...")
             display.show()
-            apps = [app.replace(":.","\n") for app in get("/app/list").split("\n")]
+            apps = [app.replace(":.","\n").replace("\r","") for app in get("/app/list").split("\n")]
+            apps.remove("")
+            display_line2(display, "Apps Fetched")
+            display.show()
             print(apps)
         line,error = 3,"503"
         print("Fetching Stats")
-        display_line3(display, "Fetching Stats")
+        display_line3(display, "Getting Stats...")
         display.show()
         money = get(f"/account?v=0&u={username}").split("\n\n")[0]
         if "Error 400" in money:
@@ -265,7 +287,7 @@ while True:
         line = 1
         display_splash(display,"Borealis","v1.2.1")
         display_splash(display,username,money)
-        mainloop(apps)
+        mainloop(apps,display)
         continue
     except Exception as e:
         print(e)
