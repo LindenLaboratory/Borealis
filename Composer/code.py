@@ -71,10 +71,6 @@ def execute(cmd):
             'X-HTTP-Method-Override': 'GET'
         }
         response = requests.post("http://192.168.4.1/", json={"command":"".join(cmd[1:])}, headers=request_header)
-    except adafruit_requests.OutOfRetries:
-        print("Command Sent")
-        saveflag("result Command Sent")
-        microcontroller.reset()
     except Exception:
         print("Command Failed to Send")
         saveflag("result Command Failed to Send")
