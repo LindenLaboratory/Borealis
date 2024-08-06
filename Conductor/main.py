@@ -83,7 +83,7 @@ def web_page():
                 timestamp = t__+int(timestamp_.split("t")[-1])
     return html,timestamp
 def ap_mode(ssid, password):
-    global addrlst, FEEDBACK
+    global addrlst
     ap = network.WLAN(network.AP_IF)
     ap.config(essid=ssid, password=password)
     ap.active(True)
