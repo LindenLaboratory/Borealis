@@ -18,9 +18,11 @@ money = ""
 
 with open("settings.txt", "r") as f:
     NAME = f.readline().strip()
+    f.close()
 
 with open('commands.txt', "r") as f:
     commands = f.readlines()
+    f.close()
 
 UPLOAD_DIR = "/app"
 
@@ -32,6 +34,7 @@ def getdata(username):
             parts = i.replace("\n", "").split(",")
             if parts[0] == username:
                 return parts
+        f.close()
 
 def execute(string):
     dictionary = eval(string)
@@ -41,12 +44,15 @@ def execute(string):
             logstr = dictionary['log']
             with open("log.txt", "r") as f:
                 lines = f.readlines()
+                f.close()
                 if len(lines) < 100:
                     with open("log.txt", "a") as f:
                         f.write(logstr + "\n")
+                        f.close()
                 else:
                     with open("log.txt", "w") as f:
                         f.write("".join(lines[1:]) + logstr + "\n")
+                        f.close()
             return "Data Logged"
         else:
             return "Data Logging Failed"
@@ -66,6 +72,7 @@ def execute(string):
                 with open("accounts.csv", "r") as f:
                     lines_ = []
                     lines = f.readlines()
+                    f.close()
                     for line in lines:
                         lst = line.split(",")
                         if username == lst[0] and password == lst[1]:
@@ -74,6 +81,7 @@ def execute(string):
                             lines_.append(line)
                     with open("accounts.csv","w") as f:
                         f.write("\n".join(lines_))
+                        f.close()
                 return "User Info Edited"
             else:
                 return "User Info Edit Failed"
@@ -168,6 +176,7 @@ def ap_mode(ssid, password):
         if sitedir == "/log":
             with open("log.txt", "r") as f:
                 response = "".join(f.readlines())
+                f.close()
         elif "/app" in sitedir:
             if sitedir == "/app":
                 response = """
@@ -215,12 +224,17 @@ def ap_mode(ssid, password):
                             splitlst = py_content.split("""'''""")
                             description,content = splitlst[1],splitlst[2]
                             py_path,txt_path = f"{UPLOAD_DIR}/{py_filename}",f"{UPLOAD_DIR}/list.txt"
+                            descript = description.lstrip().rstrip().replace("\n",":.").replace("\r","")+"\n"
                             try:
                                 with open(py_path, 'w') as f:
                                     f.write(content.lstrip())
-                                with open(txt_path,"a") as f:
-                                    f.write(description.lstrip().rstrip().replace("\n",":.").replace("\r","")+"\n")
-                                print("Python file saved successfully",py_path)
+                                    f.close()
+                                with open(txt_path,"r") as f:
+                                    if descript not in "".join(f.readlines()):
+                                        f.close()
+                                        with open(txt_path,"a") as f:
+                                            f.write(descript)
+                                        print("Python file saved successfully",py_path)
                                 response = "File uploaded successfully"
                             except OSError as e:
                                 print(f"Error saving Python file: {e}")
@@ -231,11 +245,13 @@ def ap_mode(ssid, password):
             elif sitedir == "/app/list":
                 with open(f"{UPLOAD_DIR}/list.txt","r") as f:
                     response = "".join(f.readlines())
+                    f.close()
             else:
                 filename = sitedir.split("/")[-1]
                 try:
                     with open(f"{UPLOAD_DIR}/{filename}","r") as f:
                         response = "".join(f.readlines())
+                        f.close()
                 except Exception as e:
                     print(e)
                     response = "Error 404: App not found"
@@ -328,6 +344,7 @@ def ap_mode(ssid, password):
                     f.close()
                 with open("accounts.csv","w") as f:
                     f.write("".join(lines_))
+                    f.close()
                             
                 response = "Data saved successfully"
             else:
@@ -341,6 +358,7 @@ def ap_mode(ssid, password):
                         password = variables[2]
                         with open("accounts.csv", "r") as f:
                             txt = "".join(f.readlines())
+                            f.close()
                             if username in txt:
                                 items = getdata(username)
                                 money = items[2]
@@ -357,8 +375,10 @@ def ap_mode(ssid, password):
                                     responses = ":.".join(responses)
                                     amounts = ":.".join(amounts)
                                     f.write(f"{username},{password},{money},{responses},{amounts}\n")
+                                    f.close()
                                 with open("log.txt","a") as f:
                                     f.write(f"Account '{username}' Created!\n")
+                                    f.close()
                         if response != "Error: Incorrect Password":
                             text = ""
                             for lst in items:
@@ -518,4 +538,5 @@ else:
     else:
         with open("commands.txt", "w") as f:
             f.write("\n".join(addcmd))
+            f.close()
         print("Borealis Offline")
