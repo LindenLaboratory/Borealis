@@ -68,7 +68,7 @@ def execute(string):
     def edit(dictionary):
         try:
             if "edit" in dictionary:
-                username,password,update = dictionary['edit'].split(",")
+                username,index_,update = dictionary['edit'].split(",")
                 with open("accounts.csv", "r") as f:
                     lines_ = []
                     lines = f.readlines()
@@ -76,7 +76,11 @@ def execute(string):
                     for line in lines:
                         lst = line.split(",")
                         if username == lst[0] and password == lst[1]:
-                            lines_.append(update)
+                            if index_ == "-1":
+                                lines_.append(line+","+update)
+                            else:
+                                lst[int(index_)] = update
+                                lines_.append(",".join(lst))
                         else:
                             lines_.append(line)
                     with open("accounts.csv","w") as f:
