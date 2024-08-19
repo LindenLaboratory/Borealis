@@ -65,22 +65,25 @@ def execute(string):
         else:
             return "Command Adding Failed"
     
-    def edit(dictionary):
+    def transfer(dictionary):
         try:
-            if "edit" in dictionary:
-                username,index_,update = dictionary['edit'].split(",")
+            if "transfer" in dictionary:
+                name,target,amount = dictionary['transfer'].split(",")
                 with open("accounts.csv", "r") as f:
                     lines_ = []
                     lines = f.readlines()
                     f.close()
                     for line in lines:
                         lst = line.split(",")
-                        if username == lst[0] and password == lst[1]:
-                            if index_ == "-1":
-                                lines_.append(line+","+update)
-                            else:
-                                lst[int(index_)] = update
+                        if username == lst[0]:
+                            if lst[2] > amount:
+                                lst[2] = lst[2] - amount
                                 lines_.append(",".join(lst))
+                            else:
+                                return "User Info Edit Failed"
+                        elif amount == lst[0]:
+                            lst[2] = lst[2] + amount
+                            lines_.append(",".join(lst))    
                         else:
                             lines_.append(line)
                     with open("accounts.csv","w") as f:
@@ -95,7 +98,7 @@ def execute(string):
     #ANALYSIS
     log(dictionary)
     command(dictionary)
-    edit(dictionary)
+    transfer(dictionary)
 
 def encrypt(string):
     pause = False
@@ -514,7 +517,6 @@ def ap_mode(ssid, password):
                     print(e)
         else:
             response = str(len(addrlst)) + ".:" + str(timestamp) + ".:" + htmlcontent
-        print(response)
         if "</html>" not in response:
             responsefinal = f"""\
 HTTP/1.1 200 OK\r
