@@ -62,16 +62,15 @@ def loadflag() -> str:
     # Decode bytes back to a string
     return bytes(byte_list).decode('utf-8')
 def execute(cmd):
-    print(f"Composer Activated\nName: 'Borealis'\nPassword: 'pico-pico'")
-    wifi.radio.connect("Borealis", "pico-pico")
     try:
+        print(f"Composer Activated (acc. 2)\nName: 'Borealis'\nPassword: 'pico-pico'")
+        wifi.radio.connect("Borealis", "pico-pico")
         pool = socketpool.SocketPool(wifi.radio)
         requests = adafruit_requests.Session(pool, ssl.create_default_context())
         request_header={
-            'X-HTTP-Method-Override': 'GET'
+                'X-HTTP-Method-Override': 'GET'
         }
         response = requests.post("http://192.168.4.1/", json={"command":"".join(cmd[1:])}, headers=request_header)
-    except adafruit_requests.OutOfRetries:
         print("Command Sent")
         saveflag("result Command Sent")
         microcontroller.reset()
@@ -104,7 +103,7 @@ def composer(password):
     print("Connecting to WiFi")
     string = loadflag()
     if "result" in string:
-        print(f"Composer Activated\nName: '"+secrets["ssid"]+"' Password: '"+secrets["password"]+"'")
+        print(f"Composer Activated (acc. 1)\nName: '"+secrets["ssid"]+"' Password: '"+secrets["password"]+"'")
         wifi.radio.connect(secrets['ssid'], secrets['password'])
         print("Connected to WiFi")
         pool = socketpool.SocketPool(wifi.radio)
@@ -177,7 +176,7 @@ def composer(password):
                         send_message(chat_id, f"Running Command {cmd}")
                         saveflag(message_in)
                         microcontroller.reset()
-                    
+
                 else:
                     send_message(chat_id, "Command is not available.")
 
