@@ -12,6 +12,7 @@ import machine
 
 #SETUP
 addrlst = []
+addrdict = {}
 responses = []
 amounts = []
 money = ""
@@ -154,7 +155,7 @@ def web_page():
     return html, timestamp
 
 def ap_mode(ssid, password):
-    global addrlst
+    global addrlst,addrdict
     ap = network.WLAN(network.AP_IF)
     ap.config(essid=ssid, password=password)
     ap.active(True)
@@ -167,8 +168,9 @@ def ap_mode(ssid, password):
     while True:
         conn, addr = s.accept()
         print('Got a connection from %s' % str(addr))
-        if str(addr).split(",")[0] not in addrlst:
-            addrlst.append(str(addr).split(",")[0])
+        address = addr[0]
+        if address not in addrlst:
+            addrlst.append(address)
         request = conn.recv(1024)
         print('Content = %s' % str(request))
         if "POST" in str(request):
@@ -181,6 +183,8 @@ def ap_mode(ssid, password):
             with open("log.txt", "r") as f:
                 response = "".join(f.readlines())
                 f.close()
+        elif sitedir == "/online":
+            response = "\n".join([str(address)+account for address,account in addrdict.items()])
         elif "/app" in sitedir:
             if sitedir == "/app":
                 response = """
@@ -508,6 +512,7 @@ def ap_mode(ssid, password):
     </body>
 </html>"""
                     else:
+                        addrdict[address] = username
                         datalst = getdata(username)[2:]
                         response = "\n\n".join([item.replace(":.","\n") for item in datalst])
                 except Exception as e:
