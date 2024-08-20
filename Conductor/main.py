@@ -7,6 +7,7 @@ import connect as __
 import _thread
 from machine import Pin
 import json
+import machine
 
 #SETUP
 addrlst = []
@@ -33,6 +34,7 @@ def execute(string):
         else:
             return "Data Logging Failed"
     def command(dictionary):
+        global commands
         if "command" in dictionary:
             commandstr=dictionary['command']
             commands.append(commandstr)
@@ -66,6 +68,8 @@ def terminate(seconds):
             for i in commands:
                 if "oscmd" in i:
                     commands.remove(i)
+        elif _.var() == True:
+            machine.reset()
         else:
             continue
         time.sleep(seconds)
@@ -94,21 +98,21 @@ def ap_mode(ssid, password):
     s.bind(('', 80))
     s.listen(5)
     while True:
-      conn, addr = s.accept()
-      print('Got a connection from %s' % str(addr))
-      if str(addr).split(",")[0] not in addrlst:
-          addrlst.append(str(addr).split(",")[0])
-      request = conn.recv(1024)
-      print('Content = %s' % str(request))
-      if "Adafruit CircuitPython" in str(request) and "POST" in str(request):
-          string = "{" + str(request).split("GET")[-1].split("{")[-1][:-1]
-          print(string);execute(string)
-      elif "Borealis Client" in str(request) and "POST" in str(request):
-          string = "{" + str(request).split("GET")[-1].split("{")[-1][:-1]
-          print(string);execute(string)
-      htmlcontent,timestamp = web_page()
-      sitedir = str(request).split(" HTTP/1.1")[0].split(" ")[1]
-      print(sitedir)
+        conn, addr = s.accept()
+        print('Got a connection from %s' % str(addr))
+        if str(addr).split(",")[0] not in addrlst:
+            addrlst.append(str(addr).split(",")[0])
+        request = conn.recv(1024)
+        print('Content = %s' % str(request))
+        if "Adafruit CircuitPython" in str(request) and "POST" in str(request):
+            string = "{" + str(request).split("GET")[-1].split("{")[-1][:-1]
+            print(string);execute(string)
+        elif "Borealis Client" in str(request) and "POST" in str(request):
+            string = "{" + str(request).split("GET")[-1].split("{")[-1][:-1]
+            print(string);execute(string)
+        htmlcontent,timestamp = web_page()
+        sitedir = str(request).split(" HTTP/1.1")[0].split(" ")[1]
+        print(sitedir)
       if sitedir == "/log":
           with open("log.txt","r") as f:
               response = "".join(f.readlines())
