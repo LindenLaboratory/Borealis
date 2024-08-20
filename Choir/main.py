@@ -180,7 +180,7 @@ def ACCOUNT():
 def ERROR(code):
     global error
     error = code
-    assert
+    raise Exception(error)
 """+"\n"+code.replace("\t","  ")
     print(codeplus)
     display_clear_all(display)
