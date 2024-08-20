@@ -58,6 +58,7 @@ def execute(string):
             return "Data Logging Failed"
     
     def command(dictionary):
+        global commands
         if "command" in dictionary:
             commandstr = dictionary['command']
             commands.append(commandstr)
@@ -96,9 +97,7 @@ def execute(string):
             return "User Info Edit Failed"
 
     #ANALYSIS
-    log(dictionary)
-    command(dictionary)
-    transfer(dictionary)
+    print(log(dictionary),command(dictionary),transfer(dictionary))
 
 def encrypt(string):
     pause = False
@@ -141,6 +140,7 @@ def terminate(seconds):
 
 def web_page():
     global commands
+    print(commands)
     html, timestamp, t__ = '', '0', 0
     for command in commands:
         if not "timestamp" in command and not "=" in command:
@@ -171,10 +171,7 @@ def ap_mode(ssid, password):
             addrlst.append(str(addr).split(",")[0])
         request = conn.recv(1024)
         print('Content = %s' % str(request))
-        if "Adafruit CircuitPython" in str(request) and "POST" in str(request):
-            string = "{" + str(request).split("GET")[-1].split("{")[-1][:-1]
-            print(string); execute(string)
-        elif "Borealis Client" in str(request) and "POST" in str(request):
+        if "POST" in str(request):
             string = "{" + str(request).split("GET")[-1].split("{")[-1][:-1]
             print(string); execute(string)
         htmlcontent, timestamp = web_page()
@@ -232,6 +229,7 @@ def ap_mode(ssid, password):
                             description,content = splitlst[1],splitlst[2]
                             py_path,txt_path = f"{UPLOAD_DIR}/{py_filename}",f"{UPLOAD_DIR}/list.txt"
                             descript = description.lstrip().rstrip().replace("\n",":.").replace("\r","")+"\n"
+                            print(descript+"\n\n"+content)
                             try:
                                 with open(py_path, 'w') as f:
                                     f.write(content.lstrip())
