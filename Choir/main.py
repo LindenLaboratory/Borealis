@@ -157,6 +157,7 @@ def send(jsondata=None):
     return response.text
 def execute(code,display):
     codeplus = """
+error = 500
 def GET(endpoint):
     return get(endpoint)
 def SEND(jsondata):
@@ -176,6 +177,10 @@ def B2():
         return 1
 def ACCOUNT():
     return getaccount()
+def ERROR(code):
+    global error
+    error = code
+    assert
 """+"\n"+code.replace("\t","  ")
     print(codeplus)
     display_clear_all(display)
