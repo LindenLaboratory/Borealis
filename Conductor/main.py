@@ -184,7 +184,7 @@ def ap_mode(ssid, password):
                 response = "".join(f.readlines())
                 f.close()
         elif sitedir == "/online":
-            response = "\n".join([str(address)+account for address,account in addrdict.items()])
+            response = "\n".join([str(address)+":."+account for address,account in addrdict.items()])
         elif "/app" in sitedir:
             if sitedir == "/app":
                 response = """
