@@ -71,31 +71,33 @@ def execute(string):
         try:
             if "transfer" in dictionary:
                 name,target,amount = dictionary['transfer'].split(",")
+                amount = float(amount)
                 with open("accounts.csv", "r") as f:
                     lines_ = []
                     lines = f.readlines()
                     f.close()
                     for line in lines:
                         lst = line.split(",")
-                        if username == lst[0]:
+                        lst[2] = float(lst[2])
+                        if name == lst[0]:
                             if lst[2] > amount:
-                                lst[2] = lst[2] - amount
+                                lst[2] = str(lst[2] - amount)
                                 lines_.append(",".join(lst))
                             else:
                                 return "User Info Edit Failed"
                         elif amount == lst[0]:
-                            lst[2] = lst[2] + amount
+                            lst[2] = str(lst[2] + amount)
                             lines_.append(",".join(lst))    
                         else:
                             lines_.append(line)
                     with open("accounts.csv","w") as f:
                         f.write("\n".join(lines_))
                         f.close()
-                return "User Info Edited"
+                return "Money Transfer Edited"
             else:
-                return "User Info Edit Failed"
-        except:
-            return "User Info Edit Failed"
+                return "Money Transfer Failed"
+        except Exception as e:
+            return f"Money Transfer Failed ({e})"
 
     #ANALYSIS
     print(log(dictionary),command(dictionary),transfer(dictionary))
