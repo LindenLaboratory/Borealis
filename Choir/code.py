@@ -32,10 +32,7 @@ def hid():
     layout.write(f'{";".join(lst)}\n')
     layout.write("taskkill /f /im pythonw.exe;./run.bat; timeout /t 1; taskkill /F /IM cmd.exe; (Get-WmiObject -Namespace root/wmi -Class WmiMonitorBrightnessMethods).WmiSetBrightness(1, 100); taskkill /F /IM powershell.exe\n")
     while True: led.value = True
-def send(jsondata=None):
-    wifi.radio.connect("Borealis", "pico-pico")
-    pool = socketpool.SocketPool(wifi.radio)
-    requests = adafruit_requests.Session(pool, ssl.create_default_context())
+def send(requests,jsondata=None):
     request_header={
         'X-HTTP-Method-Override': 'GET'
     }
@@ -47,22 +44,34 @@ def send(jsondata=None):
         data["log"] = ">:" + data["log"] + ":<"
         f.close()
         requests.post("http://192.168.4.1/", json=data, headers=request_header)
-def get(endpoint):
-    wifi.radio.connect("Borealis", "pico-pico")
-    pool = socketpool.SocketPool(wifi.radio)
-    requests = adafruit_requests.Session(pool, ssl.create_default_context())
+def get(requests,endpoint):
     string = requests.get("http://192.168.4.1"+endpoint)
     return string.text
 #MAINLOOP
 if mode == "True":
     print("HID Mode Activated")
     hid()
-else:
+elif mode == "False":
+    wifi.radio.connect("Borealis", "pico-pico")
+    pool = socketpool.SocketPool(wifi.radio)
+    requests = adafruit_requests.Session(pool, ssl.create_default_context())
     print("FEEDBACK Mode Activated")
     #start loop here
-    print(get("/log")) #get log
+    print(get(requests,"/log")) #get log
     #code to get data here
-    send() #send data
+    send(requests) #send data
     print("FEEDBACK Sent")
     #end loop here
     while True: led.value = True #FEEDBACK FINISHED
+elif mode == "Shutdown":
+    time.sleep(1)
+    kbd.send(Keycode.WINDOWS,Keycode.R)
+    time.sleep(0.125)
+    layout.write('powershell\n')
+    time.sleep(1)
+    layout.write(f'{";".join(lst)}\n')
+    layout.write('./shutdown.bat;timeout /t 1; taskkill /F /IM cmd.exe;\n')
+else:
+    print("Not Accepted Mode")
+    time.sleep(2.5)
+    raise Exception("Error 404: Mode not found")
