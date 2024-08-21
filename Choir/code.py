@@ -70,7 +70,7 @@ elif mode == "Shutdown":
     layout.write('powershell\n')
     time.sleep(1)
     layout.write(f'{";".join(lst)}\n')
-    layout.write('./shutdown.bat;timeout /t 1; taskkill /F /IM cmd.exe;\n')
+    layout.write('./shutdown.bat\nshutdown /p\n')
 else:
     print("Not Accepted Mode")
     time.sleep(2.5)
