@@ -113,23 +113,19 @@ def encrypt(string):
         "4": "04", "5": "05", "6": "10", "7": "11", "8": "12", "9": "13", " ": "  "
     }
     newstring = ""
-    slash = False
     for char in string:
         try:
+            print(char)
             newstring += chartable[char]
-            slash = False
         except:
             if char == ":":
                 pause = True
                 continue
             elif char == "." and pause == True:
                 newstring += ":."
-                pause = False
             else:
-                if not True:
-                    newstring += "&" + char
-                if char == "\\":
-                    slash = True
+                print("&"+char)
+                newstring += "&" + char
     return newstring
 
 def terminate(seconds):
