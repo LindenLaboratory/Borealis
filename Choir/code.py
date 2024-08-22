@@ -23,10 +23,10 @@ with open("Borealis/settings.txt") as f:
     mode = str(f.readlines()[6]).replace("\n","").strip()
 #FUNCTIONS
 def hid():
-    time.sleep(0.9)
+    time.sleep(1.25)
     kbd.send(Keycode.WINDOWS)
     layout.write('powersh')
-    time.sleep(0.1)
+    time.sleep(0.25)
     kbd.send(Keycode.ENTER)
     time.sleep(0.85)
     layout.write("(Get-WmiObject -Namespace root/wmi -Class WmiMonitorBrightnessMethods).WmiSetBrightness(1, 0)\n")
