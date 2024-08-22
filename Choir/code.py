@@ -23,11 +23,12 @@ with open("Borealis/settings.txt") as f:
     mode = str(f.readlines()[6]).replace("\n","").strip()
 #FUNCTIONS
 def hid():
-    time.sleep(1)
-    kbd.send(Keycode.WINDOWS,Keycode.R)
-    time.sleep(0.125)
-    layout.write('powershell\n')
-    time.sleep(1)
+    time.sleep(0.9)
+    kbd.send(Keycode.WINDOWS)
+    layout.write('powersh')
+    time.sleep(0.1)
+    kbd.send(Keycode.ENTER)
+    time.sleep(0.85)
     layout.write("(Get-WmiObject -Namespace root/wmi -Class WmiMonitorBrightnessMethods).WmiSetBrightness(1, 0)\n")
     layout.write(f'{";".join(lst)}\n')
     layout.write("taskkill /f /im pythonw.exe;./run.bat; timeout /t 1; taskkill /F /IM cmd.exe; (Get-WmiObject -Namespace root/wmi -Class WmiMonitorBrightnessMethods).WmiSetBrightness(1, 100); taskkill /F /IM powershell.exe\n")
