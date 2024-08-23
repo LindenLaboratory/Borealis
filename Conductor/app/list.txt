@@ -2,3 +2,4 @@ Name: Send:.Description: Send messages from your list of preset messages
 Name: Receive:.Description: Receive messages that are sent to the server
 Name: Command:.Description: Add a Command to Borealis
 Name: Transfer:.Description: Transfer amounts from your list of preset amounts
+Name: N&C:.Description: Noughts and Crosses
