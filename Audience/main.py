@@ -1,67 +1,190 @@
 #IMPORTS
-import subprocess, socket, time, os
-from colorama import init
-from termcolor import colored
+import requests
+import subprocess
+import os
+import tkinter as tk
+import time
 
 #SETUP
-init()
 si = subprocess.STARTUPINFO()
 si.dwFlags |= subprocess.STARTF_USESHOWWINDOW
-wait,finalwait = 1,0
-with open('settings.txt','r') as f:
-	lst_ = f.readlines()
-	borealisname = lst_[1].replace("\n","")
-	wifi = lst_[0].replace("\n","")
-	coloura = lst_[2].replace("\n","")
-	colourb = lst_[3].replace("\n","")
-	delay = int(lst_[4].replace("\n",""))
-	additional = float(lst_[5].replace("\n",""))
+name = "Borealis"
 
 #FUNCTIONS
-def get(url):
-	try:
-		s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		s.connect((url, 80))
-		s.sendall(bytes(f"GET /log HTTP/1.1\r\nHost:{url}\r\n\r\n", encoding='utf-8'))
-		eosstr = s.recv(4096).decode()
-		s.close()
-		return eosstr
-	except Exception:
-		return False
+def connect():
+    """
+    Connect to Borealis
+    """
+    if not os.path.isfile("borealis.xml"):
+        with open("borealis.xml","w") as f:
+            XML = f"""<?xml version="1.0"?>
+            <WLANProfile xmlns="http://www.microsoft.com/networking/WLAN/profile/v1">
+                <name>Borealis</name>
+                <SSIDConfig>
+                    <SSID>
+                        <name>{name}</name>
+                    </SSID>
+                </SSIDConfig>
+                <connectionType>ESS</connectionType>
+                <connectionMode>auto</connectionMode>
+                <MSM>
+                    <security>
+                        <authEncryption>
+                            <authentication>WPA2PSK</authentication>
+                            <encryption>AES</encryption>
+                            <useOneX>false</useOneX>
+                        </authEncryption>
+                        <sharedKey>
+                            <keyType>passPhrase</keyType>
+                            <protected>false</protected>
+                            <keyMaterial>pico-pico</keyMaterial>
+                        </sharedKey>
+                    </security>
+                </MSM>
+                <MacRandomization xmlns="http://www.microsoft.com/networking/WLAN/profile/v3">
+                    <enableRandomization>false</enableRandomization>
+                </MacRandomization>
+            </WLANProfile>
+            """
+            f.write(XML)
+    subprocess.call('netsh wlan add profile filename="borealis.xml"', startupinfo=si)
+    subprocess.call('netsh wlan add profile filename="borealis.xml"', startupinfo=si)
+    subprocess.call(f"netsh wlan connect {name}", startupinfo=si)
+    time.sleep(5)
 
-def ping(ip):
-	global wait
-	subprocess.call('netsh wlan add profile filename="borealis.xml"', startupinfo=si)
-	subprocess.call(f"netsh wlan connect {borealisname}", startupinfo=si)
-	if finalwait == 0: 
-		wait = wait + additional
-		time.sleep(wait)
-	else: time.sleep(finalwait)
-	result = get(ip)
-	return result
+class Audience:
+    def __init__(self, root, width: int, height: int):
+        """
+        Controls the GUI of the audience program
+        :param root: tk.Tk() object
+        :param width: Width of window
+        :param height: Height of window
+        """
+        self.root = root
+        self.root.title("Audience")
+        self.root.configure(bg="#2b2b2b")
+        self.root.geometry(f"{width}x{height}")
+        self.file_location = tk.StringVar()
+        self.interval = tk.StringVar()
+        self.name = tk.StringVar()
+        self.include_timestamp = tk.BooleanVar()
+        self.create_widgets()
+        root.mainloop()
 
-def clear(exception):
-    current_directory = os.getcwd()
-    for filename in os.listdir(current_directory):
-        if filename.endswith(".txt") and filename != exception:
-            os.remove(filename)
+    def create_widgets(self):
+        """
+        Creates widgets
+        """
+        #FRAMEa
+        self.framea = tk.Frame(self.root, bg="#2b2b2b")
+        self.framea.pack(pady=10)
+        file_label = tk.Label(self.framea, text="Log Directory:", bg="#2b2b2b", fg="#ffffff",font=("Consolas",12),width=15)
+        file_label.pack(side=tk.LEFT)
+        self.file_entry = tk.Entry(self.framea, width=50, bg="#3b3b3b", fg="#ffffff", textvariable=self.file_location,
+                                   font=("Consolas",12))
+        self.file_entry.pack(side=tk.LEFT, padx=10)
+        #FRAMEb
+        self.frameb = tk.Frame(self.root, bg="#2b2b2b")
+        self.frameb.pack(pady=10)
+        interval_label = tk.Label(self.frameb, text="Interval:", bg="#2b2b2b", fg="#ffffff", font=("Consolas", 12),
+                                  width=15)
+        interval_label.pack(side=tk.LEFT)
+        self.interval_entry = tk.Entry(self.frameb, width=50, bg="#3b3b3b", fg="#ffffff", textvariable=self.interval,
+                                       font=("Consolas",12))
+        self.interval_entry.pack(side=tk.LEFT, padx=10)
+        #FRAMEd
+        self.framed = tk.Frame(self.root, bg="#2b2b2b")
+        self.framed.pack(pady=10)
+        name_label = tk.Label(self.framed, text="Borealis Name:", bg="#2b2b2b", fg="#ffffff", font=("Consolas", 12),
+                                  width=15)
+        name_label.pack(side=tk.LEFT)
+        self.name_entry = tk.Entry(self.framed, width=50, bg="#3b3b3b", fg="#ffffff", textvariable=self.name,
+                                       font=("Consolas",12))
+        self.name_entry.pack(side=tk.LEFT, padx=10)
+        #FRAMEc
+        self.framec = tk.Frame(self.root, bg="#2b2b2b")
+        timestamp_checkbox = tk.Checkbutton(self.framec, text="Include Timestamp", variable=self.include_timestamp,
+                                            bg="#4b4b4b", fg="#ffffff", selectcolor="#3b3b3b",font=("Consolas",12),
+                                            borderwidth=4, relief="raised",width=30)
+        submit_button = tk.Button(self.framec, text="Start", command=self.submit_fields, bg="#4b4b4b", fg="#ffffff",
+                                  width=20,font=("Consolas",12), borderwidth=3, relief="raised")
+        submit_button.pack(side=tk.LEFT,padx=10,pady=20)
+        timestamp_checkbox.pack(side=tk.RIGHT,padx=10,pady=20)
+        self.framec.pack(pady=10)
+
+    def submit_fields(self):
+        """
+        Formats submitted text
+        """
+        try:
+            global name
+            file = self.file_location.get()
+            interval = float(self.interval.get())
+            name = self.name.get()
+            timestamp = self.include_timestamp.get()
+        except:
+            self.root.after(2500, exit)
+            framelst = [self.framea, self.frameb, self.framed, self.framec]
+            for frame in framelst:
+                frame.destroy()
+            frame = tk.Frame(self.root, bg="#4b4b4b")
+            frame.pack(padx=20, pady=20, fill="both", expand=True)
+            self.text = tk.Text(frame, bg="#4b4b4b", borderwidth=4, relief="sunken", font=("Consolas", 15), fg="#ffffff")
+            self.text.insert(tk.END, "Error: Incorrect entries for one or more fields. Make sure you enter a number "
+                                     "for the field 'Interval'!")
+            self.text.config(state="disabled")
+            self.text.pack(fill="both", expand=True)
+        framelst = [self.framea, self.frameb, self.framed, self.framec]
+        for frame in framelst:
+            frame.destroy()
+        frame = tk.Frame(self.root, bg="#4b4b4b")
+        frame.pack(padx=20, pady=20, fill="both", expand=True)
+        self.text = tk.Text(frame, bg="#4b4b4b", borderwidth=4, relief="sunken", font=("Consolas", 15), fg="#ffffff")
+        self.text.insert(tk.END, f"Audience is now running. Data is being logged in {file} every {interval}s. Press "
+                                 f"'Esc' to close audience or 'Enter' to reconnect to Borealis on the event of the "
+                                 f"network restarting.")
+        self.text.config(state="disabled")
+        self.text.pack(fill="both", expand=True)
+        self.root.bind("<KeyPress>", self.keypress)
+        self.run(file, interval, timestamp)
+
+    def keypress(self,event):
+        """
+        Detects key presses to shut down audience or reconnect to wifi
+        """
+        if event.keysym == "Escape":
+            self.root.after(2500,exit)
+            self.text.config(state="normal")
+            self.text.delete(1.0, tk.END)
+            self.text.insert(tk.END, "Audience shutting down...")
+            self.text.config(state="disabled")
+        elif event.keysym == "Enter":
+            connect()
+
+    def run(self, file: str, interval: float, timestamp: bool):
+        try:
+            """
+            Runs Audience
+            :param file: Directory to write logged information to
+            :param interval: Interval between each request
+            :param timestamp: Whether to log the current timestamp
+            """
+            connect()
+            time_, url = 0, "192.168.4.1/log"
+            if not os.path.isdir(file):
+                os.mkdir(file)
+            while True:
+                num = 0
+                with open(f"{file}\\log{num}.txt", "a") as f:
+                    log = requests.get("http://192.168.4.1/log")
+                    if timestamp:
+                        time_ = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
+                    total = "\n".join([",".join((i, time_)) for i in log])
+                    num += 1
+                    f.write(total)
+                time.sleep(interval)
+        except:
+            print("Connection Error")
 
 #MAINLOOP
-print(colored("Press ENTER to continue or type DELETE to remove existing snapshots","light_blue"))
-delete = input()
-if delete.lower() == "delete":
-	clear("settings.txt")
-while True:
-	_ = ping("192.168.4.1")
-	if _ == False: 
-		subprocess.call(f"netsh wlan connect {wifi}", startupinfo=si)
-		time.sleep(0.5)
-	else:
-		os.system("cls")
-		print(colored(_,"cyan"))
-		timestamp = time.time()
-		with open(f"{timestamp}.txt","w") as f:
-			f.write(_)
-		finalwait = wait
-		subprocess.call(f"netsh wlan connect {wifi}", startupinfo=si)
-		time.sleep(delay)
+app = Audience(tk.Tk(),600,250)
