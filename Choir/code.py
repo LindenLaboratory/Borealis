@@ -21,7 +21,7 @@ led.direction = digitalio.Direction.OUTPUT
 led.value = False
 with open("Borealis/settings.txt") as f:
     mode = str(f.readlines()[6]).replace("\n","").strip()
-d1,d2,d3=1,0.5,1.5
+d1,d2,d3=1.5,0.5,1.5
 #FUNCTIONS
 def hid():
     time.sleep(d1)
