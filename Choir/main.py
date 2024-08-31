@@ -119,7 +119,7 @@ def display_text(display,txt):
         display_line1(display,chunks[0])
         display_line2(display,chunks[1])
         display_line3(display,chunks[2])
-        display_line4(display,chunks[3])
+        display_line4(display,truncation(chunks[3]+chunks[4]) if len(chunks) > 4 else chunks[3])
     except:
         pass
     display.show()
